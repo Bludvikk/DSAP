@@ -5,7 +5,7 @@ import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server'
 
 
-export async function GET(request: NextApiRequest) {
+export async function GET(request: Request) {
   const events = await prisma.events.findMany({
   })
 
