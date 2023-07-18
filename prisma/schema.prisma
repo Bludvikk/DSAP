@@ -1,0 +1,84 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id             Int       @id @unique @default(autoincrement())
+    name           String?
+    email          String    @unique
+    hashedPassword String
+    roleId         Int
+    statusId       Int
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @updatedAt
+    deletedAt      DateTime?
+    role           Reference @relation("user_roleIdToReference", fields: [roleId], references: [id])
+    status         Reference @relation("user_statusIdToReference", fields: [statusId], references: [id])
+    news           News[]    @relation("news_userIdToUser")
+    events         Events[]  @relation("events_userIdToUser")
+}
+
+model Entity {
+    id        Int         @id @default(autoincrement())
+    code      String      @unique
+    name      String
+    createdAt DateTime    @default(now())
+    updatedAt DateTime    @default(now()) @updatedAt
+    deletedAt DateTime?
+    isShow    Boolean     @default(true)
+    isDefault Boolean     @default(false)
+    isParent  Boolean     @default(false)
+    parentId  Int?
+    fieldProp String
+    color     String?
+    icon      String?
+    parent    Entity?     @relation("entityToEntity", fields: [parentId], references: [id])
+    entity    Entity[]    @relation("entityToEntity")
+    reference Reference[]
+}
+
+model Reference {
+    id          Int       @id @default(autoincrement())
+    code        String    @unique
+    name        String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @default(now()) @updatedAt
+    deletedAt   DateTime?
+    isShow      Boolean   @default(true)
+    isDefault   Boolean   @default(false)
+    entityId    Int
+    color       String?
+    entity      Entity    @relation(fields: [entityId], references: [id], onDelete: Cascade)
+    user_role   User[]    @relation("user_roleIdToReference")
+    user_status User[]    @relation("user_statusIdToReference")
+}
+
+model News {
+    id          Int      @id @unique @default(autoincrement())
+    title       String
+    userId      Int
+    content     String   @db.VarChar(9999)
+    attachments String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
+    author      User     @relation("news_userIdToUser", fields: [userId], references: [id])
+}
+
+model Events {
+    id          Int       @id @unique @default(autoincrement())
+    title       String
+    userId      Int
+    content     String    @db.VarChar(9999)
+    attachments String
+    startDate   DateTime
+    endDate     DateTime?
+    location    String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @default(now()) @updatedAt
+    author      User      @relation("events_userIdToUser", fields: [userId], references: [id])
+}
