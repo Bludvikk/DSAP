@@ -1,20 +1,13 @@
-import type { User } from 'next-auth';
-import { UsersType } from '@/utils/db.type';
-import NextAuth from 'next-auth';
+import NextAuth, { DefaultSession } from "next-auth"
 
-export type AuthenticatedUserType = Pick<
-  UsersType,
-  'id' | 'email' | 'userName' | 'role' | 'department' | 'status' | 'profile'
->;
-
-declare module 'next-auth' {
+declare module "next-auth" {
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
   interface Session {
-    user: User;
-  }
-}
-
-declare module 'next-auth/jwt' {
-  interface JWT {
-    user: User;
+    user: {
+      /** The user's postal address. */
+      address: string
+    } & DefaultSession["user"]
   }
 }
