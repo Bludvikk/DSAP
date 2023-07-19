@@ -1,20 +1,20 @@
+
+
 import { prisma } from '@/lib/prisma'
-import { NextApiRequest } from 'next';
 
 
 import { NextResponse } from 'next/server'
 
 
 export async function GET(request: Request) {
-  const events = await prisma.events.findMany({
-  })
+  try {
+    const events = await prisma.events.findMany();
 
-
-
-
-  return NextResponse.json(events)
-
-
+    return NextResponse.json(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    return NextResponse.error();
+  }
 }
 
 export async function POST(request: Request) {
