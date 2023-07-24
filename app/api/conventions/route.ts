@@ -2,11 +2,14 @@
 
 import { prisma } from '@/lib/prisma'
 
+import type { WebhookEvent } from '@clerk/nextjs/dist/types/server';
+
 
 import { NextResponse } from 'next/server'
 
 
 export async function GET(request: Request) {
+
   try {
     const events = await prisma.conventions.findMany({
       include: {

@@ -122,7 +122,7 @@ const Footer = () => {
             </div>
           </div>
           <div>
-            <div className=" flex-col justify-center items-start gap-3 inline-flex">
+            <div className="                                                                                                                                                                                                                          flex-col justify-center items-start gap-3 inline-flex">
               <div className="text-center text-white text-base font-bold leading-normal">
                 Subscribe Now
               </div>

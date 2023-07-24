@@ -48,7 +48,7 @@ const Conventions = () => {
               Conventions
             </h1>
           </div>
-          <div className="w-44 pb-10">
+          <div className="w-44">
             <Button label="Write Conventions" onClick={WriteModal.onOpen} />
           </div>
         </div>

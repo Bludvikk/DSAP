@@ -111,8 +111,6 @@ const WriteConventionModal = () => {
               control={control}
               name="startDate"
             />
-          </div>
-          <div className="flex flex-row gap-4">
             <DatePickerDemo
               label={"End Date"}
               control={control}

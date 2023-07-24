@@ -13,17 +13,3 @@ export default async function fetchEvents() {
     throw error;
   }
 }
-
-export async function postEvents() {
-  try {
-    const response = await axios.post("api/events/");
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error(response.statusText);
-    }
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-}

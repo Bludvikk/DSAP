@@ -44,11 +44,11 @@ const NewsPage = () => {
   return (
     <Layout>
       <div className="flex py-[200px] flex-col h-auto">
-        <div className="inline-flex items-center justify-between px-20">
+        <div className="items-center justify-between flex flex-row px-20">
           <div>
-            <h1 className="text-3xl text-gray-700 font-semibold">Events</h1>
+            <h1 className="text-3xl text-gray-700 font-semibold">News</h1>
           </div>
-          <div className="w-36 pb-10">
+          <div className="w-36">
             <Button label="Write News" onClick={WriteModal.onOpen} />
           </div>
         </div>
