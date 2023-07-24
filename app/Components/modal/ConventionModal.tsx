@@ -177,7 +177,7 @@ const WriteConventionModal = () => {
         render={({ field }) => (
           <ReactQuill
             {...field}
-            className="
+            className=" h-full
              pb-12"
             theme={"snow"}
             onChange={(_content, _delta, _source, editor) => {
