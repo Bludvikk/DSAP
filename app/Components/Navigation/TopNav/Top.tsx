@@ -25,10 +25,10 @@ const LogoInfo = () => {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <text className="font-semibold text-xl text-blue-600">
-          Drugstore Association of the Philippines Inc.
+        <text className="font-semibold text-xl text-[#243e8e]">
+          Drugstores Association of the Philippines Inc.
         </text>
-        <text className="font-extralight text-blue-500">
+        <text className="font-extralight text-[#243e8e]">
           "One Cause, One Voice, One Future"
         </text>
       </div>
