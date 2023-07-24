@@ -21,21 +21,17 @@ const Card = ({
   return (
     <div
       className={`
-        sm:w-auto
-        md:w-[480px]
-        lg:w-auto
-        xl:w-auto
-        mx-auto
-     h-auto
-     px-auto
+        mx-auto 
+        h-auto
+        px-auto
       bg-white
-       rounded-3xl
+        rounded-3xl
         hover:scale-110
-         hover:shadow-2xl
-          transition-all
-           duration-300
-            border-slate-700
-             shadow-lg
+        hover:shadow-2xl
+        transition-all
+        duration-300
+      border-slate-700
+        shadow-lg
               shadow-teal-100
               ${isSelected ? "opacity-100" : "opacity-50 hover:opacity-100"}
               `}
@@ -45,7 +41,7 @@ const Card = ({
       <div className="flex flex-col items-start justify-between self-stretch">
         <Image
           src={image}
-          className="w-auto h-[240px] md:w-[600px] grow shrink md:h-[360px] self-stretch object-cover object-center rounded-t-3xl"
+          className="w-auto h-[120px] md:w-[600px] grow shrink md:h-[360px] self-stretch object-cover object-center rounded-t-3xl"
           width={100}
           height={100}
           alt="image"

@@ -32,7 +32,8 @@ export async function POST(request: Request) {
   const {
     title,
     location,
-    date,
+    startDate,
+    endDate,
     attachments,
     content,
     userId,
@@ -43,7 +44,8 @@ export async function POST(request: Request) {
   const event = await prisma.conventions.create({
     data: {
       title,
-      date,
+      startDate,
+      endDate,
       location,
       attachments,
       content,

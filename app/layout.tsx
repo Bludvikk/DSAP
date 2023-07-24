@@ -33,7 +33,7 @@ export default function RootLayout({
             <WriteEventModal />
             <WriteNewsModal />
             <WriteConventionModal />
-            <div className="max-w-[2520px] mx-auto">{children}</div>
+            <div className="w-full overflow-x-hidden mx-auto">{children}</div>
           </ClientOnly>
         </body>
       </html>

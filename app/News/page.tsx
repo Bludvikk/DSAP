@@ -8,6 +8,7 @@ import parse from "html-react-parser";
 import fetchNews from "./fetchNews";
 import Button from "../Components/Button";
 import Layout from "../Components/Layout";
+import axios from "axios";
 
 interface News {
   id: number;
@@ -24,13 +25,20 @@ const NewsPage = () => {
   const [news, setNews] = useState<News[]>([]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchNews() {
       try {
-        const newsData = await fetchNews();
-        setNews(newsData);
-      } catch (error) {}
+        const response = await axios.get("api/news");
+        if (response.status === 200) {
+          setNews(response.data);
+        } else {
+          throw new Error(response.statusText);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
-    fetchData();
+
+    fetchNews();
   }, []);
 
   return (

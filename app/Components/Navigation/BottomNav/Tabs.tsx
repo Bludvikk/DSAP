@@ -39,7 +39,7 @@ const Tabs = () => {
         </div>
       </div>
       <button className="text-white invisible md:visible  bg-teal-500 hover:scale-110 transition duration-300  font-medium cursor-pointer shadow-lg hover:bg-white hover:border-teal-500 hover:border-[1px] hover:text-teal-500 p-2 rounded-md">
-        Membership
+        Contact Us
       </button>
     </div>
   );

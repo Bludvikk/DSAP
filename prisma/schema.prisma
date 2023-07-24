@@ -78,7 +78,8 @@ model Conventions {
     location    String
     content     String   @db.VarChar(9999)
     attachments String
-    date        DateTime
+    startDate   DateTime
+    endDate     DateTime
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
     author      User     @relation("conventions_userIdToUser", fields: [userId], references: [id])

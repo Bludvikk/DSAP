@@ -47,7 +47,7 @@ const Event = () => {
             <h1 className="text-3xl text-gray-700 font-semibold">Events</h1>
           </div>
           <div className="w-36 pb-10">
-            <Button label="Write News" onClick={WriteModal.onOpen} />
+            <Button label="Write Event" onClick={WriteModal.onOpen} />
           </div>
         </div>
         <div>
