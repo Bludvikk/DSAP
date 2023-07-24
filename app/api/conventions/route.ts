@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
   try {
-    const events = await prisma.events.findMany({
+    const events = await prisma.conventions.findMany({
       include: {
         author: {
           select: {
@@ -32,8 +32,7 @@ export async function POST(request: Request) {
   const {
     title,
     location,
-    startDate,
-    endDate,
+    date,
     attachments,
     content,
     userId,
@@ -41,12 +40,11 @@ export async function POST(request: Request) {
 
 
 
-  const event = await prisma.events.create({
+  const event = await prisma.conventions.create({
     data: {
       title,
+      date,
       location,
-      startDate,
-      endDate,
       attachments,
       content,
       userId,

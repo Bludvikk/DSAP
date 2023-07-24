@@ -2,15 +2,15 @@
 
 import { cache, use, useEffect, useState } from "react";
 import Button from "../Components/Button";
-import useWriteNewsModal from "../hooks/useWriteEventModal";
+import useWriteConventionModal from "../hooks/useWriteConventionModal";
 import axios from "axios";
-import fetchEvents from "./fetchEvents";
+import fetchConventions from "./fetchConventions";
 import Image from "next/image";
 import parse from "html-react-parser";
 import { Content } from "next/font/google";
 import Layout from "../Components/Layout";
 
-interface Event {
+interface Conventions {
   id: number;
   content: string;
   attachments: string;
@@ -23,16 +23,16 @@ interface Event {
   location: string;
 }
 
-const Event = () => {
-  const WriteModal = useWriteNewsModal();
+const Conventions = () => {
+  const WriteModal = useWriteConventionModal();
 
-  const [events, setEvents] = useState<Event[]>([]);
+  const [conventions, setConventions] = useState<Conventions[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const eventsData = await fetchEvents();
-        setEvents(eventsData);
+        const conventionsData = await fetchConventions();
+        setConventions(conventionsData);
       } catch (error) {}
     }
 
@@ -44,29 +44,31 @@ const Event = () => {
       <div className="flex py-[200px] flex-col h-auto">
         <div className="inline-flex items-center justify-between px-20">
           <div>
-            <h1 className="text-3xl text-gray-700 font-semibold">Events</h1>
+            <h1 className="text-3xl text-gray-700 font-semibold">
+              Conventions
+            </h1>
           </div>
-          <div className="w-36 pb-10">
-            <Button label="Write News" onClick={WriteModal.onOpen} />
+          <div className="w-44 pb-10">
+            <Button label="Write Conventions" onClick={WriteModal.onOpen} />
           </div>
         </div>
         <div>
           <div>
-            {events.length > 0 &&
-              events.map((event) => {
+            {conventions.length > 0 &&
+              conventions.map((convention) => {
                 const initialSentences =
-                  event.content.split(".").slice(0, 1).join(". ") + ".";
+                  convention.content.split(".").slice(0, 1).join(". ") + ".";
                 return (
                   <div
                     className="items-center justify-center py-2 px-16 "
-                    key={event.id}
+                    key={convention.id}
                   >
                     <div className="flex-col flex border-[1px] hover:animate-pulse cursor-pointer  transition duration-700 shadow-md h-[360px] rounded-lg">
                       <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
                         <div className="relative">
                           <Image
-                            src={event.attachments}
-                            alt={event.title}
+                            src={convention.attachments}
+                            alt={convention.title}
                             width={100}
                             height={100}
                             className="md:h-[320px] w-[440px] h-[180px] self-stretch basis-0 md:w-[840px] object-center object-cover"
@@ -74,10 +76,10 @@ const Event = () => {
                         </div>
                         <div className="flex flex-col text-clip w-full">
                           <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
-                            {event.title}
+                            {convention.title}
                           </h1>
                           <h2 className="font-extralight">
-                            Author: {event.author?.name}
+                            Author: {convention.author?.name}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">
@@ -100,4 +102,4 @@ const Event = () => {
   );
 };
 
-export default Event;
+export default Conventions;

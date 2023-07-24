@@ -30,7 +30,7 @@ const TabContent = ({
   return (
     <button
       className={classNames(
-        "self-stretch px-14 py-2 rounded-tl-lg rounded-tr-lg flex-col justify-center items-center gap-1.5 inline-flex",
+        "self-stretch px-2 md:px-6 lg:px-8 xl:px-14 py-2 rounded-tl-lg rounded-tr-lg flex-col justify-center items-center gap-1.5 inline-flex",
         {
           "bg-gray-100 text-teal-500 ": activeTab === tabNumber,
           "bg-white text-gray-500": activeTab !== tabNumber,
@@ -53,7 +53,7 @@ const Tabs = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="w-full h-[90px] justify-center items-center gap-11 inline-flex">
+      <div className="w-full h-[90px] justify-center items-center gap-2 md:gap-6 lg:gap-8 xl:gap-11 inline-flex">
         <TabContent
           tabNumber={1}
           activeTab={activeTab}

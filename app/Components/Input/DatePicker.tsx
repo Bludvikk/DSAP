@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { useRef, useState } from "react";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -26,6 +26,8 @@ interface DatePicProps {
 }
 
 export function DatePickerDemo({ control, name, label }: DatePicProps) {
+  const popoverRef = useRef(null);
+
   return (
     <Controller
       name={name}
@@ -36,7 +38,7 @@ export function DatePickerDemo({ control, name, label }: DatePicProps) {
             <Button
               variant={"outline"}
               className={cn(
-                "w-[280px] justify-start focus:border-teal-500 text-left font-normal",
+                "md:w-[280px] w-auto justify-start focus:border-teal-500 text-left font-normal",
                 !value && "text-muted-foreground"
               )}
             >

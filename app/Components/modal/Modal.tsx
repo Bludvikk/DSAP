@@ -89,9 +89,9 @@ const Modal: React.FC<ModalProps> = ({
           className="
           relative 
           w-full
-          md:w-[800px]
-          lg:w-[1000px]
-          xl:w-[1440px]
+          md:w-[480px]
+          lg:w-[800px]
+          xl:w-[1280px]
           my-6
           mx-auto 
           h-full 
@@ -146,7 +146,7 @@ const Modal: React.FC<ModalProps> = ({
                     hover:opacity-70
                     transition
                     absolute
-                    left-9
+                    right-9
                   "
                   onClick={handleClose}
                 >

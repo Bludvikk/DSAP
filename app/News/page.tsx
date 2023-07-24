@@ -1,16 +1,15 @@
 "use client";
 
-import { cache, use, useEffect, useState } from "react";
-import Button from "../Components/Button";
-import useWriteNewsModal from "../hooks/useWriteEventModal";
-import axios from "axios";
-import fetchEvents from "./fetchEvents";
+import { useEffect, useState } from "react";
+import useNewsModal from "../hooks/useNewsModal";
+
 import Image from "next/image";
 import parse from "html-react-parser";
-import { Content } from "next/font/google";
+import fetchNews from "./fetchNews";
+import Button from "../Components/Button";
 import Layout from "../Components/Layout";
 
-interface Event {
+interface News {
   id: number;
   content: string;
   attachments: string;
@@ -18,24 +17,19 @@ interface Event {
   author: {
     name: string;
   } | null;
-  startDate: string;
-  endDate: string;
-  location: string;
+  date: Date;
 }
-
-const Event = () => {
-  const WriteModal = useWriteNewsModal();
-
-  const [events, setEvents] = useState<Event[]>([]);
+const NewsPage = () => {
+  const WriteModal = useNewsModal();
+  const [news, setNews] = useState<News[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const eventsData = await fetchEvents();
-        setEvents(eventsData);
+        const newsData = await fetchNews();
+        setNews(newsData);
       } catch (error) {}
     }
-
     fetchData();
   }, []);
 
@@ -52,21 +46,21 @@ const Event = () => {
         </div>
         <div>
           <div>
-            {events.length > 0 &&
-              events.map((event) => {
+            {news.length > 0 &&
+              news.map((news) => {
                 const initialSentences =
-                  event.content.split(".").slice(0, 1).join(". ") + ".";
+                  news.content.split(".").slice(0, 1).join(". ") + ".";
                 return (
                   <div
                     className="items-center justify-center py-2 px-16 "
-                    key={event.id}
+                    key={news.id}
                   >
                     <div className="flex-col flex border-[1px] hover:animate-pulse cursor-pointer  transition duration-700 shadow-md h-[360px] rounded-lg">
                       <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
                         <div className="relative">
                           <Image
-                            src={event.attachments}
-                            alt={event.title}
+                            src={news.attachments}
+                            alt={news.title}
                             width={100}
                             height={100}
                             className="md:h-[320px] w-[440px] h-[180px] self-stretch basis-0 md:w-[840px] object-center object-cover"
@@ -74,10 +68,10 @@ const Event = () => {
                         </div>
                         <div className="flex flex-col text-clip w-full">
                           <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
-                            {event.title}
+                            {news.title}
                           </h1>
                           <h2 className="font-extralight">
-                            Author: {event.author?.name}
+                            Author: {news.author?.name}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">
@@ -100,4 +94,4 @@ const Event = () => {
   );
 };
 
-export default Event;
+export default NewsPage;

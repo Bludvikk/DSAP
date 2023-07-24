@@ -7,6 +7,9 @@ import RegisterModal from "./Components/modal/RegisterModal";
 import "./globals.css";
 import { Rubik } from "next/font/google";
 import WriteEventModal from "./Components/modal/EventModal";
+import WriteNewsModal from "./Components/modal/NewsModal";
+import WriteConventionModal from "./Components/modal/ConventionModal";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const font = Rubik({
   subsets: ["latin"],
@@ -23,18 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={font.className}>
-        <ClientOnly>
-          <LoginModal />
-          <RegisterModal />
-          <WriteEventModal />
-
-          <NavigationBar />
-          <div className="pt-[166px] max-w-[2520px] mx-auto">{children}</div>
-          <Footer />
-        </ClientOnly>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={font.className}>
+          <ClientOnly>
+            <WriteEventModal />
+            <WriteNewsModal />
+            <WriteConventionModal />
+            <div className="max-w-[2520px] mx-auto">{children}</div>
+          </ClientOnly>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

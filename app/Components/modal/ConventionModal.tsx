@@ -13,14 +13,14 @@ import Modal from "./Modal";
 import Input from "../Input/input";
 import Heading from "../Heading";
 
-import useWriteNewsModal from "@/app/hooks/useWriteEventModal";
+import useWriteConventionModal from "@/app/hooks/useWriteConventionModal";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { DatePickerDemo } from "../Input/DatePicker";
 import Image from "next/image";
 
-const WriteEventModal = () => {
+const WriteConventionModal = () => {
   const {
     handleSubmit,
     register,
@@ -39,7 +39,7 @@ const WriteEventModal = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const WriteModal = useWriteNewsModal();
+  const WriteModal = useWriteConventionModal();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -86,7 +86,7 @@ const WriteEventModal = () => {
 
     // Send the event data to your endpoint
     axios
-      .post("/api/events", data)
+      .post("/api/conventions", data)
       .then(() => {
         toast.success("Event Posted!");
         WriteModal.onClose();
@@ -104,18 +104,9 @@ const WriteEventModal = () => {
     <div className="flex flex-col h-[600px] self-stretch gap-6 overflow-x-hidden overflow-y-scroll ">
       <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
         <div className="flex-col flex gap-2 w-auto h-auto items-start justify-center">
-          <h1>Event Duration</h1>
+          <h1>Event Date</h1>
           <div className="flex flex-row gap-4">
-            <DatePickerDemo
-              label={"Start Date"}
-              control={control}
-              name="startDate"
-            />
-            <DatePickerDemo
-              label={"End Date"}
-              control={control}
-              name="endDate"
-            />
+            <DatePickerDemo label={"Date"} control={control} name="date" />
           </div>
         </div>
         <div className=" flex-col flex gap-2 w-auto md:w-96 h-auto items-start justify-center">
@@ -207,7 +198,7 @@ const WriteEventModal = () => {
     <Modal
       disabled={isLoading}
       isOpen={WriteModal.isOpen}
-      title="Create an Event"
+      title="Post a Convention"
       actionLabel="POST"
       onClose={WriteModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
@@ -216,4 +207,4 @@ const WriteEventModal = () => {
   );
 };
 
-export default WriteEventModal;
+export default WriteConventionModal;

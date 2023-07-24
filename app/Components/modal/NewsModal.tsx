@@ -13,21 +13,20 @@ import Modal from "./Modal";
 import Input from "../Input/input";
 import Heading from "../Heading";
 
-import useWriteNewsModal from "@/app/hooks/useWriteEventModal";
-
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { DatePickerDemo } from "../Input/DatePicker";
 import Image from "next/image";
+import useNewsModal from "@/app/hooks/useNewsModal";
 
-const WriteEventModal = () => {
+const WriteNewsModal = () => {
   const {
     handleSubmit,
     register,
     getValues,
-    control,
-    watch,
     setValue,
+    watch,
+    control,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
@@ -39,9 +38,10 @@ const WriteEventModal = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const WriteModal = useWriteNewsModal();
+  const WriteModal = useNewsModal();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const [imageUrl, setImageUrl] = useState<string>("");
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +71,8 @@ const WriteEventModal = () => {
     }
   };
 
+  console.log(getValues("author"));
+
   useEffect(() => {
     if (imageUrl) {
       const parser = imageUrl.toString();
@@ -81,14 +83,14 @@ const WriteEventModal = () => {
   const attachments = watch("attachments");
 
   console.log(attachments);
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    // Send the event data to your endpoint
     axios
-      .post("/api/events", data)
+      .post("api/news", data)
       .then(() => {
-        toast.success("Event Posted!");
+        toast.success("News Posted!");
         WriteModal.onClose();
       })
       .catch((error) => {
@@ -97,41 +99,17 @@ const WriteEventModal = () => {
       .finally(() => {
         setIsLoading(false);
       });
-
-    // Handle the response, e.g., show success message, redirect, etc.
   };
+
   const bodyContent = (
-    <div className="flex flex-col h-[600px] self-stretch gap-6 overflow-x-hidden overflow-y-scroll ">
-      <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
+    <div className="flex flex-col h-[600px] gap-6 overflow-auto ">
+      <div className="flex flex-col items-start justify-center">
         <div className="flex-col flex gap-2 w-auto h-auto items-start justify-center">
-          <h1>Event Duration</h1>
+          <h1>Date</h1>
           <div className="flex flex-row gap-4">
-            <DatePickerDemo
-              label={"Start Date"}
-              control={control}
-              name="startDate"
-            />
-            <DatePickerDemo
-              label={"End Date"}
-              control={control}
-              name="endDate"
-            />
+            <DatePickerDemo label={"News Date"} control={control} name="date" />
           </div>
         </div>
-        <div className=" flex-col flex gap-2 w-auto md:w-96 h-auto items-start justify-center">
-          <h1>Venue</h1>
-          <Input
-            register={register}
-            id="location"
-            type="text"
-            errors={errors}
-            label="Venue"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col items-start justify-center">
         <label
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           htmlFor="file_input"
@@ -155,6 +133,8 @@ const WriteEventModal = () => {
                 alt="Uploaded file"
                 className="h-[60px] w-auto"
                 priority
+                placeholder="blur"
+                blurDataURL={imageUrl}
               />
             </div>
           )}
@@ -177,8 +157,7 @@ const WriteEventModal = () => {
         render={({ field }) => (
           <ReactQuill
             {...field}
-            className="
-             pb-12"
+            className="h-full pb-12"
             theme={"snow"}
             onChange={(_content, _delta, _source, editor) => {
               field.onChange(editor.getHTML());
@@ -207,7 +186,7 @@ const WriteEventModal = () => {
     <Modal
       disabled={isLoading}
       isOpen={WriteModal.isOpen}
-      title="Create an Event"
+      title="Write News"
       actionLabel="POST"
       onClose={WriteModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
@@ -216,4 +195,4 @@ const WriteEventModal = () => {
   );
 };
 
-export default WriteEventModal;
+export default WriteNewsModal;

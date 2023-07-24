@@ -8,19 +8,20 @@ datasource db {
 }
 
 model User {
-    id             Int       @id @unique @default(autoincrement())
+    id             Int           @id @unique @default(autoincrement())
     name           String?
-    email          String    @unique
+    email          String        @unique
     hashedPassword String
     roleId         Int
     statusId       Int
-    createdAt      DateTime  @default(now())
-    updatedAt      DateTime  @updatedAt
+    createdAt      DateTime      @default(now())
+    updatedAt      DateTime      @updatedAt
     deletedAt      DateTime?
-    role           Reference @relation("user_roleIdToReference", fields: [roleId], references: [id])
-    status         Reference @relation("user_statusIdToReference", fields: [statusId], references: [id])
-    news           News[]    @relation("news_userIdToUser")
-    events         Events[]  @relation("events_userIdToUser")
+    role           Reference     @relation("user_roleIdToReference", fields: [roleId], references: [id])
+    status         Reference     @relation("user_statusIdToReference", fields: [statusId], references: [id])
+    news           News[]        @relation("news_userIdToUser")
+    events         Events[]      @relation("events_userIdToUser")
+    conventions    Conventions[] @relation("conventions_userIdToUser")
 }
 
 model Entity {
@@ -63,10 +64,24 @@ model News {
     title       String
     userId      Int
     content     String   @db.VarChar(9999)
+    date        DateTime
     attachments String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now()) @updatedAt
     author      User     @relation("news_userIdToUser", fields: [userId], references: [id])
+}
+
+model Conventions {
+    id          Int      @id @unique @default(autoincrement())
+    title       String
+    userId      Int
+    location    String
+    content     String   @db.VarChar(9999)
+    attachments String
+    date        DateTime
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now()) @updatedAt
+    author      User     @relation("conventions_userIdToUser", fields: [userId], references: [id])
 }
 
 model Events {
