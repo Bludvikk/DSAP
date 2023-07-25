@@ -5,13 +5,13 @@ import LoginModal from "./Components/modal/LoginModal";
 import Modal from "./Components/modal/Modal";
 import RegisterModal from "./Components/modal/RegisterModal";
 import "./globals.css";
-import { Rubik } from "next/font/google";
+import { Inter } from "next/font/google";
 import WriteEventModal from "./Components/modal/EventModal";
 import WriteNewsModal from "./Components/modal/NewsModal";
 import WriteConventionModal from "./Components/modal/ConventionModal";
 import { ClerkProvider } from "@clerk/nextjs";
 
-const font = Rubik({
+const font = Inter({
   subsets: ["latin"],
 });
 

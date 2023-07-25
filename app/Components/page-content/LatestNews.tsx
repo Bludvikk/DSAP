@@ -42,10 +42,11 @@ const LatestNews = () => {
     },
   ];
   return (
-    <div className="w-auto h-auto p-20 rounded-xl flex-col justify-between items-center gap-6 inline-flex">
+    <div className="w-auto h-auto px-6 py-10 md:p-20 rounded-xl flex-col justify-between items-center gap-6 inline-flex">
       <div className="self-stretch text-gray-700 text-2xl font-bold leading-loose">
         Latest News
       </div>
+      <div className="">
       <div className="flex flex-row gap-4 md:gap-6 lg:gap-12 xl:gap-16">
         {cards.map((card) => (
           <Card
@@ -58,6 +59,7 @@ const LatestNews = () => {
             handleCardHover={() => handleCardHover(card.id)}
           />
         ))}
+      </div>
       </div>
     </div>
   );

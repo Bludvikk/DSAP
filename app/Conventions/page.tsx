@@ -42,14 +42,16 @@ const Conventions = () => {
   return (
     <Layout>
       <div className="flex py-[200px] flex-col h-auto">
-        <div className="inline-flex items-center justify-between px-20">
+        <div className="inline-flex items-center justify-between px-12 md:px-20">
           <div>
-            <h1 className="text-3xl text-gray-700 font-semibold">
+            <h1 className="text-md md:text-3xl text-gray-700 font-semibold">
               Conventions
             </h1>
           </div>
-          <div className="w-44">
-            <Button label="Write Conventions" onClick={WriteModal.onOpen} />
+          <div className="w-22 md:w-66 h-auto bg-teal-500 rounded-md">
+            <button className="text-sm md:text-xl p-2 text-white" onClick={WriteModal.onOpen} >
+              Write Conventions
+            </button>
           </div>
         </div>
         <div>
@@ -60,7 +62,7 @@ const Conventions = () => {
                   convention.content.split(".").slice(0, 1).join(". ") + ".";
                 return (
                   <div
-                    className="items-center justify-center py-2 px-16 "
+                    className="items-center justify-center py-2 px-10 md:px-20 "
                     key={convention.id}
                   >
                     <div className="flex-col flex border-[1px] hover:animate-pulse cursor-pointer  transition duration-700 shadow-md h-[360px] rounded-lg">
