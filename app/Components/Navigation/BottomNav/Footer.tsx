@@ -121,28 +121,6 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div className="                                                                                                                                                                                                                          flex-col justify-center items-start gap-3 inline-flex">
-              <div className="text-center text-white text-base font-bold leading-normal">
-                Subscribe Now
-              </div>
-              <div className="grow shrink basis-0 self-stretch bg-gray-100 rounded-lg justify-end items-center flex">
-                <input
-                  placeholder="Email..."
-                  className="grow shrink focus:border-gray-800 px-4 basis-0 self-stretch  border-l-[1px] border-bg-gray-700 rounded-l-md text-gray-500 text-base font-semibold leading-normal"
-                />
-                <div className="w-[70px] p-2 cursor-pointer text-white hover:bg-teal-600 self-stretch bg-teal-500 rounded-tr-lg rounded-br-lg justify-center items-center flex">
-                  <PiPaperPlaneRightFill size={30} />
-                </div>
-              </div>
-              <div className="justify-end items-center gap-4 inline-flex">
-                <div className="w-8 h-[31.35px] relative" />
-                <div className="w-16 h-[32.99px] relative" />
-                <div className="w-24 h-[30.04px] relative" />
-                <div className="w-8 h-[27.08px] py-[0.26px] justify-center items-center flex" />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div className="self-stretch px-11 py-4 bg-teal-700 justify-start items-center gap-6 inline-flex">

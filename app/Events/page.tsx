@@ -71,6 +71,13 @@ const Event = () => {
                             height={100}
                             className="md:h-[320px] w-[440px] h-[180px] self-stretch basis-0 md:w-[840px] object-center object-cover"
                           />
+                          <div className="w-[580px] absolute top-[90%] px-6 py-4 bg-teal-500 rounded-bl-xl rounded-br-xl justify-start items-start inline-flex">
+                            <div>
+                              <span className="text-white text-lg font-bold leading-7">
+                                {event.startDate}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                         <div className="flex flex-col text-clip w-full">
                           <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">

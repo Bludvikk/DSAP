@@ -12,7 +12,7 @@ import axios from "axios";
 import Modal from "./Modal";
 import Input from "../Input/input";
 import Heading from "../Heading";
-
+import { BsBuildings } from "react-icons/bs";
 import useWriteConventionModal from "@/app/hooks/useWriteConventionModal";
 
 import ReactQuill from "react-quill";
@@ -100,11 +100,17 @@ const WriteConventionModal = () => {
 
     // Handle the response, e.g., show success message, redirect, etc.
   };
+
+  const handleDiscard = () => {
+    setSelectedFile(null);
+    setImageUrl("");
+  };
+
   const bodyContent = (
     <div className="flex flex-col h-[600px] self-stretch gap-6 overflow-x-hidden overflow-y-scroll ">
       <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
         <div className="flex-col flex gap-2 w-auto h-auto items-start justify-center">
-          <h1>Event Date</h1>
+          <h1>Convention Date</h1>
           <div className="flex flex-row gap-4">
             <DatePickerDemo
               label={"Start Date"}
@@ -119,15 +125,20 @@ const WriteConventionModal = () => {
           </div>
         </div>
         <div className=" flex-col flex gap-2 w-auto md:w-96 h-auto items-start justify-center">
-          <h1>Venue</h1>
-          <Input
-            register={register}
-            id="location"
-            type="text"
-            errors={errors}
-            label="Venue"
-            required
-          />
+          <div className="pl-10">
+            <text>Convention Name</text>
+          </div>
+          <div className="flex flex-row gap-2 w-full items-center justify-start ">
+            <BsBuildings size={30} />
+            <Input
+              register={register}
+              id="title"
+              type="text"
+              errors={errors}
+              label="Convention Name"
+              required
+            />
+          </div>
         </div>
       </div>
 
@@ -139,30 +150,42 @@ const WriteConventionModal = () => {
           Upload file
         </label>
         <div className="flex-row flex w-full justify-between items-center border-[1px] rounded-md px-2 py-2">
-          <input
-            id="file_input"
-            {...register("attachments")}
-            type="file"
-            onChange={handleFileChange}
-          />
-
-          {imageUrl && (
-            <div className="flex-col flex items-center justify-start">
-              <Image
+          {selectedFile ? (
+            <div className="flex flex-col items-center justify-start">
+              <img
                 src={imageUrl}
-                width={100}
-                height={100}
                 alt="Uploaded file"
                 className="h-[60px] w-auto"
-                priority
               />
+              <div className="mt-2 flex space-x-4">
+                <button
+                  type="button"
+                  onClick={handleDiscard}
+                  className="bg-red-500 hover:bg-red-600 px-3 py-1 text-white rounded-md"
+                >
+                  Discard
+                </button>
+                <input
+                  id="file_input"
+                  {...register("attachments")}
+                  type="file"
+                  onChange={handleFileChange}
+                />
+              </div>
             </div>
+          ) : (
+            <input
+              id="file_input"
+              {...register("attachments")}
+              type="file"
+              onChange={handleFileChange}
+            />
           )}
         </div>
       </div>
       <Input
-        id="title"
-        label="Title"
+        id="location"
+        label="Venue"
         disabled={isLoading}
         register={register}
         errors={errors}

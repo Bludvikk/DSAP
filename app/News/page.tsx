@@ -9,7 +9,7 @@ import fetchNews from "./fetchNews";
 import Button from "../Components/Button";
 import Layout from "../Components/Layout";
 import axios from "axios";
-
+import moment from "moment";
 interface News {
   id: number;
   content: string;
@@ -20,10 +20,10 @@ interface News {
   } | null;
   date: Date;
 }
+
 const NewsPage = () => {
   const WriteModal = useNewsModal();
   const [news, setNews] = useState<News[]>([]);
-
   useEffect(() => {
     async function fetchNews() {
       try {
@@ -56,6 +56,8 @@ const NewsPage = () => {
           <div>
             {news.length > 0 &&
               news.map((news) => {
+                const formattedDate = moment(news.date).format("MMM - Do");
+
                 const initialSentences =
                   news.content.split(".").slice(0, 1).join(". ") + ".";
                 return (
@@ -73,6 +75,13 @@ const NewsPage = () => {
                             height={100}
                             className="md:h-[320px] w-[440px] h-[180px] self-stretch basis-0 md:w-[840px] object-center object-cover"
                           />
+                          <div className="w-auto absolute top-[81.5%] px-6 py-4 bg-teal-500 rounded-tr-xl justify-start items-start inline-flex">
+                            <div>
+                              <span className="text-white text-lg font-bold leading-7">
+                                {formattedDate}
+                              </span>
+                            </div>
+                          </div>
                         </div>
                         <div className="flex flex-col text-clip w-full">
                           <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
