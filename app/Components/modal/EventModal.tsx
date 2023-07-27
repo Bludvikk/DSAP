@@ -19,6 +19,8 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { DatePickerDemo } from "../Input/DatePicker";
 import Image from "next/image";
+import { revalidateTag } from "next/cache";
+import { useRouter } from "next/navigation";
 
 const WriteEventModal = () => {
   const {
@@ -27,6 +29,7 @@ const WriteEventModal = () => {
     getValues,
     control,
     watch,
+    reset,
     setValue,
     formState: { errors },
   } = useForm<FieldValues>({
@@ -36,6 +39,8 @@ const WriteEventModal = () => {
     },
     mode: "onChange",
   });
+
+  const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -55,7 +60,7 @@ const WriteEventModal = () => {
         formData.append("upload_preset", "my_upload");
         const response = await axios.post(
           `https://api.cloudinary.com/v1_1/dsap/image/upload`,
-          formData
+          formData,
         );
 
         console.log(response);
@@ -69,6 +74,7 @@ const WriteEventModal = () => {
         console.error("Error uploading image:", error);
       }
     }
+
   };
 
   useEffect(() => {
@@ -83,23 +89,35 @@ const WriteEventModal = () => {
   console.log(attachments);
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
-
+  
     // Send the event data to your endpoint
-    axios
-      .post("/api/events", data)
-      .then(() => {
-        toast.success("Event Posted!");
-        WriteModal.onClose();
+    fetch("/api/events", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data), // Pass the data object here
+    })
+      .then((response) => {
+        if (response.ok) {
+          toast.success("Event Posted!");
+          WriteModal.onClose();
+          reset(),
+          // Handle the response, e.g., show success message, redirect, etc.
+         router.replace('/Events')
+        } else {
+          throw new Error("Error posting the event.");
+        }
       })
       .catch((error) => {
-        toast.error(error);
+        toast.error(error.message);
       })
       .finally(() => {
         setIsLoading(false);
       });
-
-    // Handle the response, e.g., show success message, redirect, etc.
   };
+  
+  
   const bodyContent = (
     <div className="flex flex-col h-[600px] self-stretch gap-6 overflow-x-hidden overflow-y-scroll ">
       <div className="flex flex-col md:flex-row gap-2 items-center justify-between">

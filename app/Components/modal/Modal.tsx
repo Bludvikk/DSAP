@@ -12,13 +12,13 @@ interface ModalProps {
   title?: string;
   body?: React.ReactElement;
   footer?: React.ReactElement;
-  actionLabel: string;
+  actionLabel: string;  
   disabled?: boolean;
   secondaryAction?: () => void;
   secondaryActionLabel?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({
+const Modal = ({
   isOpen,
   onClose,
   onSubmit,
@@ -29,7 +29,7 @@ const Modal: React.FC<ModalProps> = ({
   disabled,
   secondaryAction,
   secondaryActionLabel,
-}) => {
+}: ModalProps) => {
   const [showModal, setShowModal] = useState(isOpen);
 
   useEffect(() => {

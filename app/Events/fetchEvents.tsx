@@ -1,10 +1,11 @@
-import axios from "axios";
+
 
 export default async function fetchEvents() {
   try {
-    const response = await axios.get("api/events");
+    const response = await fetch("api/events", { next: { revalidate: 10}});
     if (response.status === 200) {
-      return response.data;
+      const data = await response.json(); // Extract and parse JSON data
+      return data; // Return the parsed data, not the response object
     } else {
       throw new Error(response.statusText);
     }
@@ -12,4 +13,5 @@ export default async function fetchEvents() {
     console.error(error);
     throw error;
   }
+
 }

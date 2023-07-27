@@ -1,12 +1,13 @@
 
 
 import { prisma } from '@/lib/prisma'
+import { revalidateTag } from 'next/cache';
 
 
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const events = await prisma.events.findMany({
       include: {
@@ -23,9 +24,11 @@ export async function GET(request: Request) {
     console.error('Error fetching events:', error);
     return NextResponse.error();
   }
+
+  
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
 
   const body = await request.json();
 
