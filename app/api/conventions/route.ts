@@ -11,7 +11,7 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
 
   try {
-    const events = await prisma.conventions.findMany({
+    const conventions = await prisma.conventions.findMany({
       include: {
         author: {
           select: {
@@ -21,7 +21,7 @@ export async function GET(request: Request) {
       }
     });
 
-    return NextResponse.json(events);
+    return NextResponse.json(conventions);
   } catch (error) {
     console.error('Error fetching events:', error);
     return NextResponse.error();

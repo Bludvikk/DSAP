@@ -10,6 +10,7 @@ import Button from "../Components/Button";
 import Layout from "../Components/Layout";
 import axios from "axios";
 import moment from "moment";
+import Link from "next/link";
 interface News {
   id: number;
   content: string;
@@ -27,9 +28,10 @@ const NewsPage = () => {
   useEffect(() => {
     async function fetchNews() {
       try {
-        const response = await axios.get("api/news");
-        if (response.status === 200) {
-          setNews(response.data);
+        const response = await fetch('/api/news');
+        if (response.ok) {
+          const data = await response.json();
+          setNews(data);
         } else {
           throw new Error(response.statusText);
         }
@@ -89,7 +91,8 @@ const NewsPage = () => {
                         </div>
                         <div className="flex flex-col text-clip w-full">
                           <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
-                            {news.title}
+                            <Link href={`/News/${news.id}`}>
+                            {news.title}</Link>
                           </h1>
                           <h2 className="font-extralight">
                             Author: {news.author?.name}

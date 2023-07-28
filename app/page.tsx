@@ -41,17 +41,11 @@ export default function Home() {
                   elit.
                 </span>
               </div>
-              <div className="md:justify-start md:items-start items-center justify-center gap-2 md:flex md:flex-col flex-row flex">
-                <div className="md:px-6 px-1 py-2 w-[200px] md:w-auto md:py-3 bg-teal-500 rounded-xl justify-center items-center gap-2.5 flex">
-                  <div className="text-center text-white text-xs md:text-xl font-semibold">
-                    Become a member
-                  </div>
+              <div className="items-center justify-between flex-row flex">
+                <div className="md:px-6 px-1 py-2 w-[300px] text-white hover:animate-none  text-xs md:text-xl font-semibold md:w-auto md:py-3 animate-pulse cursor-pointer hover:text-teal-500 hover:bg-white  border-teal-500 border-[1px] duration-700/90 bg-teal-500 rounded-xl justify-center items-center gap-2.5 flex">
+                  Become a Member
                 </div>
-                <div className="px-6 py-3 rounded-[120px] justify-center items-center flex">
-                  <div className="text-center text-white text-xs md:text-xl font-semibold">
-                    How it works
-                  </div>
-                </div>
+                
               </div>
             </div>
           </div>

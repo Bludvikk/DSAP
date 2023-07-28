@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const Events = () => {
   return (
-    <div className="w-full h-[906.75px] p-20 bg-gray-100 flex-row justify-center items-center gap-12 flex ">
+    <div className="w-full h-auto p-20 bg-gray-100 flex-row justify-center items-center gap-12 flex ">
       <div className="w-[580px] h-[834.55px] flex-col justify-start items-start gap-6 inline-flex">
         <div className="self-stretch text-gray-700 text-2xl font-bold leading-loose">
           In suscipit lacus metus, consequat pretium odio vulputate vel.

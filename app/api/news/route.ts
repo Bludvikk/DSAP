@@ -1,27 +1,60 @@
 
 
 import { prisma } from '@/lib/prisma'
+import { error } from 'console';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 
 import { NextResponse } from 'next/server'
 
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request,
+  response: NextApiResponse
+) {
+  
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get('id')
+
   try {
-    const events = await prisma.news.findMany({
+    if (id) {
+      // Fetch a single news item by its ID from the database
+      const newsItem = await prisma.news.findUnique({
+        where: {
+          id: Number(id),
+        },
+        include: {
+          author: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+
+      if (!newsItem) {
+        // If the news item with the specified ID is not found, return a 404 error
+        return NextResponse.error
+      }
+
+      return NextResponse.json(newsItem)
+    }
+
+     // Fetch all news items when no ID is provided
+     const newsItems = await prisma.news.findMany({
       include: {
         author: {
           select: {
             name: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
-    return NextResponse.json(events);
+    return NextResponse.json(newsItems)
   } catch (error) {
-    console.error('Error fetching events:', error);
-    return NextResponse.error();
+    console.error('Error fetching news:', error);
+    return response.json(error)
   }
 }
 
