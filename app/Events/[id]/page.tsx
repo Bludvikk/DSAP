@@ -1,15 +1,10 @@
-import Button from "@/app/Components/Button";
-import Layout from "@/app/Components/Layout";
-import Footer from "@/app/Components/Navigation/BottomNav/Footer";
-import useWriteNewsModal from "@/app/hooks/useWriteEventModal";
-import parse from "html-react-parser";
 import moment from "moment";
-import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
+import parse from "html-react-parser";
+import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 
-interface News {
+interface Events {
   id: number;
   content: string;
   attachments: string;
@@ -17,45 +12,39 @@ interface News {
   author: {
     name: string;
   } | null;
-  date: Date;
+  startDate: Date;
+  endDate: Date;
+  location: string;
 }
 
 export async function generateStaticParams() {
-  const response = await fetch(`http://localhost:3000/api/news`);
+  const response = await fetch(`http://localhost:3000/api/events`);
 
-  const newsResponse = await response.json();
+  const eventResponse = await response.json();
 
-  return newsResponse.map((news: any) => ({
-    id: String(news.id),
+  return eventResponse.map((events: any) => ({
+    id: String(events.id),
   }));
 }
 
-async function fetchNews(id: string) {
-  const response = await fetch(`http://localhost:3000/api/news?id=${id}`, {
+async function fetchEvents(id: string) {
+  const response = await fetch(`http://localhost:3000/api/events?id=${id}`, {
     next: { revalidate: 10 },
   });
 
-  console.log("fetching news posts with id", id);
+  console.log("fetching events posts with id", id);
 
   return response.json();
 }
 
-// export default async function NewsDetail({
-//   params,
-// }: {
-//   params: { id: string };
-// }) {
-//   const news = (await fetch(`http://localhost:3000/api/news?id=${params.id}`, {
-//     cache: "no-store",
-//   }).then((res) => res.json())) as News;
-// const formattedDate = moment(news.date).format("MMMM DD, YYYY");
-
-export default async function newsPost({ params, searchParams }: any) {
+export default async function eventsPost({ params, searchParams }: any) {
   const { id } = params;
 
-  const news = await fetchNews(id);
+  const events = await fetchEvents(id);
 
-  const formattedDate = moment(news.date).format("MMMM DD, YYYY");
+  const formattedStartDate = moment(events.startDate).format("MMM Do");
+  const formattedEndDate = moment(events.endDate).format("Do");
+
   return (
     <div>
       <div className="max-w-screen-xl mx-auto">
@@ -82,7 +71,7 @@ export default async function newsPost({ params, searchParams }: any) {
             ></div>
             <img
               alt="yawa"
-              src={news.attachments}
+              src={events.attachments}
               className="absolute left-0 top-0 w-full h-full z-0 object-cover"
             />
             <div className="p-4 absolute bottom-0 left-0 z-20">
@@ -93,8 +82,7 @@ export default async function newsPost({ params, searchParams }: any) {
                 News
               </a>
               <h2 className="text-4xl font-semibold text-gray-100 leading-tight">
-                Pellentesque a consectetur velit, ac molestie ipsum. Donec
-                sodales, massa et auctor.
+                {events.title}
               </h2>
               <div className="flex mt-3">
                 <img
@@ -104,17 +92,20 @@ export default async function newsPost({ params, searchParams }: any) {
                 />
                 <div>
                   <p className="font-semibold text-gray-200 text-sm">
-                    {news.author?.name}
+                    {events.author?.name}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
-                    {formattedDate}
+                    {formattedStartDate} - {formattedEndDate}
+                  </p>
+                  <p className="font-semibold text-gray-400 text-xs">
+                    {events.location}
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <div className="px-4 lg:px-0 mt-12 text-gray-700 max-w-screen-md mx-auto text-lg leading-relaxed">
-            <div className="pb-20">{parse(news.content)}</div>
+            {/* <div className="pb-20">{parse(events.content)}</div> */}
           </div>
         </main>
       </div>

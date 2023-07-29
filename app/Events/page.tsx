@@ -9,6 +9,7 @@ import Image from "next/image";
 import parse from "html-react-parser";
 import { Content } from "next/font/google";
 import Layout from "../Components/Layout";
+import Link from "next/link";
 
 interface Event {
   id: number;
@@ -73,9 +74,12 @@ const Event = () => {
                           />
                         </div>
                         <div className="flex flex-col text-clip w-full">
-                          <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
+                          <Link
+                            href={`/Events/${event.id}`}
+                            className="hover:text-blue-600"
+                          >
                             {event.title}
-                          </h1>
+                          </Link>
                           <h2 className="font-extralight">
                             Author: {event.author?.name}
                           </h2>

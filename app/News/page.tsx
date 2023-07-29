@@ -12,6 +12,9 @@ import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
 import WriteNewsModal from "../Components/modal/NewsModal";
+import { TfiWrite } from "react-icons/tfi";
+import { FaPencilAlt } from "react-icons/fa";
+import { AiOutlineEdit } from "react-icons/ai";
 interface News {
   id: number;
   content: string;
@@ -32,7 +35,9 @@ const NewsPage = () => {
   useEffect(() => {
     async function fetchNews() {
       try {
-        const response = await fetch("/api/news");
+        const response = await fetch("/api/news", {
+          next: { revalidate: 10 },
+        });
         if (response.ok) {
           const data = await response.json();
           setNews(data);
@@ -57,13 +62,12 @@ const NewsPage = () => {
               News
             </h1>
           </div>
-          <div className="w-22 md:w-66 h-auto bg-teal-500 rounded-md">
-            <button
-              className="text-sm md:text-xl p-2 text-white"
-              onClick={WriteModal.onOpenForNew}
-            >
-              Write News
-            </button>
+          <div
+            onClick={WriteModal.onOpenForNew}
+            className="w-22  md:w-66 h-auto text-teal-500 border-[1px] hover:text-white hover:bg-teal-500 duration-300 transition-colors p-1 rounded-md flex flex-row gap-2 items-center cursor-pointer"
+          >
+            <TfiWrite size={30} />
+            Write
           </div>
         </div>
         <div>
@@ -79,7 +83,7 @@ const NewsPage = () => {
                     className="items-center justify-center py-2 px-10 md:px-20"
                     key={news.id}
                   >
-                    <div className="flex-col flex border-[1px] hover:animate-pulse cursor-pointer  transition duration-700 shadow-md h-[360px] rounded-lg">
+                    <div className="flex-col flex border-[1px]  shadow-md h-[auto] rounded-lg">
                       <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
                         <div className="relative">
                           <Image
@@ -97,10 +101,26 @@ const NewsPage = () => {
                             </div>
                           </div>
                         </div>
+
                         <div className="flex flex-col text-clip w-full">
-                          <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
-                            <Link href={`/News/${news.id}`}>{news.title}</Link>
-                          </h1>
+                          <div className="flex flex-ol justify-between">
+                            <h1 className="font-semibold hover:underline justify-between  cursor-pointer  text-gray-700 flex flex-row text-md md:font-bold md:text-3xl">
+                              <Link
+                                href={`/News/${news.id}`}
+                                className="hover:text-blue-600"
+                              >
+                                {news.title}
+                              </Link>
+                            </h1>
+                            <div
+                              className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
+                              onClick={() =>
+                                WriteModal.onOpenForUpdate(news.id)
+                              }
+                            >
+                              <AiOutlineEdit size={30} />
+                            </div>
+                          </div>
                           <h2 className="font-extralight">
                             Author: {news.author?.name}
                           </h2>
@@ -112,11 +132,6 @@ const NewsPage = () => {
                         </div>
                       </div>
                     </div>
-                    <Button
-                      small
-                      label="Update"
-                      onClick={() => WriteModal.onOpenForUpdate(news.id)}
-                    />
                   </div>
                 );
               })}
