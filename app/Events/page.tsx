@@ -9,7 +9,6 @@ import Image from "next/image";
 import parse from "html-react-parser";
 import { Content } from "next/font/google";
 import Layout from "../Components/Layout";
-import moment from "moment";
 
 interface Event {
   id: number;
@@ -43,31 +42,23 @@ const Event = () => {
   return (
     <Layout>
       <div className="flex py-[200px] flex-col h-auto">
-        <div className="inline-flex items-center justify-between px-10 md:px-20">
-        <div>
-            <h1 className="text-md md:text-3xl text-gray-700 font-semibold">
-              Events
-            </h1>
+        <div className="inline-flex items-center justify-between px-20">
+          <div>
+            <h1 className="text-3xl text-gray-700 font-semibold">Events</h1>
           </div>
-          <div className="w-22 md:w-66 h-auto bg-teal-500 rounded-md">
-            <button className="text-sm md:text-xl p-2 text-white" onClick={WriteModal.onOpen} >
-              Write Event
-            </button>
+          <div className="w-36">
+            <Button label="Write Event" onClick={WriteModal.onOpen} />
           </div>
         </div>
         <div>
           <div>
             {events.length > 0 &&
               events.map((event) => {
-
-                const formattedStartDate = moment(event.startDate).format("MMM  Do");
-                const formattedEndDate = moment(event.endDate).format("MMM  Do");
-
                 const initialSentences =
                   event.content.split(".").slice(0, 1).join(". ") + ".";
                 return (
                   <div
-                    className="items-center justify-center py-2 px-10 md:px-20"
+                    className="items-center justify-center py-2 px-16 "
                     key={event.id}
                   >
                     <div className="flex-col flex border-[1px] hover:animate-pulse cursor-pointer  transition duration-700 shadow-md h-[360px] rounded-lg">
@@ -80,15 +71,6 @@ const Event = () => {
                             height={100}
                             className="md:h-[320px] w-[440px] h-[180px] self-stretch basis-0 md:w-[840px] object-center object-cover"
                           />
-                          <div className="w-auto absolute top-[80.5%] px-1 md:top-[81.5%] md:px-6 md:py-4 py-1 bg-teal-500 rounded-tr-xl justify-start items-start inline-flex">
-                            <div>
-                              <span className="text-white text-sm md:text-lg font-bold leading-7">
-                                {formattedStartDate}
-                                {" - "}
-                                {formattedEndDate}
-                              </span>
-                            </div>
-                          </div>
                         </div>
                         <div className="flex flex-col text-clip w-full">
                           <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">

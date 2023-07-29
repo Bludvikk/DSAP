@@ -19,7 +19,10 @@ import { DatePickerDemo } from "../Input/DatePicker";
 import Image from "next/image";
 import useNewsModal from "@/app/hooks/useNewsModal";
 
-const WriteNewsModal = () => {
+interface WriteNewsModalProps {
+  newsItemId: number | null;
+}
+const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
   const {
     handleSubmit,
     register,
@@ -71,18 +74,12 @@ const WriteNewsModal = () => {
     }
   };
 
-  console.log(getValues("author"));
-
   useEffect(() => {
     if (imageUrl) {
       const parser = imageUrl.toString();
       setValue("attachments", parser);
     }
   }, [imageUrl]);
-
-  const attachments = watch("attachments");
-
-  console.log(attachments);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
@@ -100,6 +97,52 @@ const WriteNewsModal = () => {
         setIsLoading(false);
       });
   };
+
+  const onUpdate: SubmitHandler<FieldValues> = (data) => {
+    if (!newsItemId) {
+      console.error("newsItemId is missing for update.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    axios
+      .put(`api/news?id=${newsItemId}`, data) // Use the newsItemId for the update
+      .then(() => {
+        toast.success("News Updated!");
+        WriteModal.onClose();
+      })
+      .catch((error) => {
+        toast.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (newsItemId) {
+      // Fetch the news item by its ID from your backend API
+      // Update the below API endpoint to match your actual backend endpoint for fetching a single news item
+      axios
+        .get(`/api/news?id=${newsItemId}`)
+        .then((response) => {
+          const existingNewsItem = response.data; // Assuming your API response returns the existing news item
+          if (existingNewsItem) {
+            // Set the form fields' initial values with the existing data
+            setValue("title", existingNewsItem.title);
+            setValue("attachments", existingNewsItem.attachments);
+            setValue("content", existingNewsItem.content);
+            // ... set other form field values ...
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching existing news item:", error);
+        });
+    }
+  }, [newsItemId, setValue]);
+
+  const handleSubmitFunction = newsItemId ? onUpdate : onSubmit;
 
   const bodyContent = (
     <div className="flex flex-col h-[600px] gap-6 overflow-auto ">
@@ -187,9 +230,9 @@ const WriteNewsModal = () => {
       disabled={isLoading}
       isOpen={WriteModal.isOpen}
       title="Write News"
-      actionLabel="POST"
+      actionLabel={newsItemId === null ? "POST" : "UPDATE"} // Conditionally set the actionLabel
       onClose={WriteModal.onClose}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleSubmitFunction)}
       body={bodyContent}
     />
   );

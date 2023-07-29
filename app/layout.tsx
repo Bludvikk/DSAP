@@ -31,7 +31,7 @@ export default function RootLayout({
         <body className={font.className}>
           <ClientOnly>
             <WriteEventModal />
-            <WriteNewsModal />
+
             <WriteConventionModal />
             <div className="w-full overflow-x-hidden mx-auto">{children}</div>
           </ClientOnly>

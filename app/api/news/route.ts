@@ -8,6 +8,50 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server'
 
 
+export async function PUT(request: Request, response: NextApiResponse) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get('id');
+
+  if (!id) {
+    return NextResponse.error();
+  }
+
+  try {
+    const existingNewsItem = await prisma.news.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (!existingNewsItem) {
+      return NextResponse.error();
+    }
+
+    // Parse the request body for the updated news item data
+    const body = await request.json();
+    const { title, attachments, content, userId, date } = body;
+
+    // Update the news item in the database
+    const updatedNewsItem = await prisma.news.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        title,
+        attachments,
+        content,
+        userId,
+        date,
+      },
+    });
+
+    return NextResponse.json(updatedNewsItem);
+  } catch (error) {
+    console.error('Error updating news item:', error);
+    return response.json(error);
+  }
+}
+
 export async function GET(
   request: Request,
   response: NextApiResponse
@@ -18,7 +62,7 @@ export async function GET(
 
   try {
     if (id) {
-      // Fetch a single news item by its ID from the database
+      
       const newsItem = await prisma.news.findUnique({
         where: {
           id: Number(id),
@@ -33,14 +77,13 @@ export async function GET(
       });
 
       if (!newsItem) {
-        // If the news item with the specified ID is not found, return a 404 error
+        
         return NextResponse.error
       }
 
       return NextResponse.json(newsItem)
     }
 
-     // Fetch all news items when no ID is provided
      const newsItems = await prisma.news.findMany({
       include: {
         author: {

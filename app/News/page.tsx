@@ -11,6 +11,7 @@ import Layout from "../Components/Layout";
 import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
+import WriteNewsModal from "../Components/modal/NewsModal";
 interface News {
   id: number;
   content: string;
@@ -24,11 +25,14 @@ interface News {
 
 const NewsPage = () => {
   const WriteModal = useNewsModal();
+
+  const { onOpenForUpdate, newsItemId } = WriteModal;
+
   const [news, setNews] = useState<News[]>([]);
   useEffect(() => {
     async function fetchNews() {
       try {
-        const response = await fetch('/api/news');
+        const response = await fetch("/api/news");
         if (response.ok) {
           const data = await response.json();
           setNews(data);
@@ -45,15 +49,19 @@ const NewsPage = () => {
 
   return (
     <Layout>
+      <WriteNewsModal newsItemId={WriteModal.newsItemId} />
       <div className="flex py-[200px] flex-col h-auto">
         <div className="items-center justify-between flex flex-row px-20">
-        <div>
+          <div>
             <h1 className="text-md md:text-3xl text-gray-700 font-semibold">
               News
             </h1>
           </div>
           <div className="w-22 md:w-66 h-auto bg-teal-500 rounded-md">
-            <button className="text-sm md:text-xl p-2 text-white" onClick={WriteModal.onOpen} >
+            <button
+              className="text-sm md:text-xl p-2 text-white"
+              onClick={WriteModal.onOpenForNew}
+            >
               Write News
             </button>
           </div>
@@ -91,8 +99,7 @@ const NewsPage = () => {
                         </div>
                         <div className="flex flex-col text-clip w-full">
                           <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
-                            <Link href={`/News/${news.id}`}>
-                            {news.title}</Link>
+                            <Link href={`/News/${news.id}`}>{news.title}</Link>
                           </h1>
                           <h2 className="font-extralight">
                             Author: {news.author?.name}
@@ -105,12 +112,14 @@ const NewsPage = () => {
                         </div>
                       </div>
                     </div>
+                    <Button
+                      small
+                      label="Update"
+                      onClick={() => WriteModal.onOpenForUpdate(news.id)}
+                    />
                   </div>
                 );
               })}
-            <div></div>
-            <div></div>
-            <div></div>
           </div>
         </div>
       </div>

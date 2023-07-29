@@ -38,6 +38,7 @@ const Button: React.FC<ButtonProps> = ({
         ${small ? "py-1" : "py-3"}
         ${small ? "font-light" : "font-semibold"}
         ${small ? "border-[1px]" : "border-2"}
+        ${small ? "w-24" : "w-auto"}
       `}
     >
       {Icon && (
