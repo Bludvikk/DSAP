@@ -4,15 +4,15 @@ import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import parse from "html-react-parser";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 
-export async function generateStaticParams() {
-  const response = await fetch(`http://localhost:3000/api/conventions`);
+// export async function generateStaticParams() {
+//   const response = await fetch(`http://localhost:3000/api/conventions`);
 
-  const conventionsResponse = await response.json();
+//   const conventionsResponse = await response.json();
 
-  return conventionsResponse.map((conventions: any) => ({
-    id: String(conventions.id),
-  }));
-}
+//   return conventionsResponse.map((conventions: any) => ({
+//     id: String(conventions.id),
+//   }));
+// }
 
 async function fetchConventions(id: string) {
   const response = await fetch(

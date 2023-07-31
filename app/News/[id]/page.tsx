@@ -9,26 +9,15 @@ import Link from "next/link";
 import React from "react";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 
-interface News {
-  id: number;
-  content: string;
-  attachments: string;
-  title: string;
-  author: {
-    name: string;
-  } | null;
-  date: Date;
-}
+// export async function generateStaticParams() {
+//   const response = await fetch(`http://localhost:3000/api/news`);
 
-export async function generateStaticParams() {
-  const response = await fetch(`http://localhost:3000/api/news`);
+//   const newsResponse = await response.json();
 
-  const newsResponse = await response.json();
-
-  return newsResponse.map((news: any) => ({
-    id: String(news.id),
-  }));
-}
+//   return newsResponse.map((news: any) => ({
+//     id: String(news.id),
+//   }));
+// }
 
 async function fetchNews(id: string) {
   const response = await fetch(`http://localhost:3000/api/news?id=${id}`, {

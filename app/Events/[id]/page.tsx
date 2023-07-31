@@ -4,15 +4,15 @@ import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import parse from "html-react-parser";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 
-export async function generateStaticParams() {
-  const response = await fetch(`http://localhost:3000/api/events`);
+// export async function generateStaticParams() {
+//   const response = await fetch(`http://localhost:3000/api/events`);
 
-  const eventResponse = await response.json();
+//   const eventResponse = await response.json();
 
-  return eventResponse.map((events: any) => ({
-    id: String(events.id),
-  }));
-}
+//   return eventResponse.map((events: any) => ({
+//     id: String(events.id),
+//   }));
+// }
 
 async function fetchEvents(id: string) {
   const response = await fetch(`http://localhost:3000/api/events?id=${id}`, {
