@@ -33,9 +33,6 @@ const Footer = () => {
                 Drugstores Association of the Philippines Inc.
               </div>
             </div>
-            <div className="text-gray-200 text-base font-normal leading-normal">
-              "One Cause, One Voice, One Future"
-            </div>
             <div className="justify-start items-end gap-3 inline-flex">
               <div className="w-8 h-8 relative">
                 <MdOutlineFacebook
@@ -85,12 +82,6 @@ const Footer = () => {
         <div className="flex flex-row gap-6">
           <div className="text-center text-gray-50 text-sm font-bold leading-tight">
             DSAP © 2023
-          </div>
-          <div className="text-center text-gray-50 text-sm font-normal leading-tight">
-            Privacy Policy
-          </div>
-          <div className="text-center text-gray-50 text-sm font-normal leading-tight">
-            Terms & Conditions
           </div>
           <div className="text-center text-gray-50 text-sm font-normal leading-tight">
             <SignOutButton>Sign Out</SignOutButton>

@@ -5,7 +5,13 @@ import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import Button from "../../Button";
-import { useSession } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  UserProfile,
+  useSession,
+} from "@clerk/nextjs";
 
 const LogoInfo = () => {
   const loginModal = useLoginModal();
@@ -40,6 +46,12 @@ const LogoInfo = () => {
             {" "}
             Become a Member
           </button>
+
+          {/* {!isUserSignedIn ? (
+            <SignOutButton>Sign Out</SignOutButton>
+          ) : (
+            <SignInButton>Sign-In</SignInButton>
+          )} */}
         </div>
       </div>
     </div>
