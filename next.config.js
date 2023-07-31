@@ -4,9 +4,6 @@ const nextConfig = {
         unoptimized: true,
         domains: ['res.cloudinary.com']
       },
-      experimental: {
-        serverActions: true
-      }
 }
 
 module.exports = nextConfig
