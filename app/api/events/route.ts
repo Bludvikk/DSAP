@@ -66,6 +66,13 @@ export async function GET(request: Request, response: NextApiResponse) {
         where: {
           id: Number(id),
         },
+        include: {
+          author: {
+            select: {
+              attributes: true
+            },
+          },
+        },
       });
 
       if (!eventsItem) {
