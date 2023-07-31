@@ -104,7 +104,7 @@ export default async function newsPost({ params, searchParams }: any) {
                 />
                 <div>
                   <p className="font-semibold text-gray-200 text-sm">
-                    {news.author?.name}
+                    {news.author?.attributes?.name}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
                     {formattedDate}
