@@ -30,7 +30,7 @@ async function handler(request: Request) {
 
   const eventType: EventType = evt.type;
   if (eventType === "user.created" || eventType === "user.updated") {
-    const { id, roleId, statusId, ...attributes } = evt.data;
+    const { id, ...attributes } = evt.data;
 
     await prisma.user.upsert({
       where: { externalId: id as string},
