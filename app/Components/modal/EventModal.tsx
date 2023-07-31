@@ -37,8 +37,12 @@ const WriteEventModal = ({ eventItemId }: WriteEventModalProps) => {
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      author: "Admin",
-      userId: 1,
+      author: {
+        attributes: {
+          username: "admin-3",
+        },
+      },
+      userId: 2,
     },
     mode: "onChange",
   });

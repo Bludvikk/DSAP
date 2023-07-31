@@ -22,7 +22,7 @@ interface News {
   title: string;
   author: {
     attributes: {
-      name: string;
+      username: string;
     } | null;
   } | null;
   date: Date;
@@ -124,7 +124,7 @@ const NewsPage = () => {
                             </div>
                           </div>
                           <h2 className="font-extralight">
-                            Author: {news.author?.attributes?.name}
+                            Author: {news.author?.attributes?.username}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">

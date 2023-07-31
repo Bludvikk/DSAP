@@ -22,8 +22,8 @@ interface Event {
   title: string;
   author: {
     attributes: {
-      name: string;
-    } | null;
+      username: string;
+    };
   } | null;
   startDate: string;
   endDate: string;
@@ -106,7 +106,7 @@ const Event = () => {
                             </div>
                           </div>
                           <h2 className="font-extralight">
-                            Author: {event.author?.attributes?.name}
+                            Author: {event.author?.attributes.username}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">

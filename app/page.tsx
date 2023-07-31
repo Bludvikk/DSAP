@@ -45,7 +45,6 @@ export default function Home() {
                 <div className="md:px-6 px-1 py-2 w-[300px] text-white hover:animate-none  text-xs md:text-xl font-semibold md:w-auto md:py-3 animate-pulse cursor-pointer hover:text-teal-500 hover:bg-white  border-teal-500 border-[1px] duration-700/90 bg-teal-500 rounded-xl justify-center items-center gap-2.5 flex">
                   Become a Member
                 </div>
-                
               </div>
             </div>
           </div>

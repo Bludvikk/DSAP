@@ -40,16 +40,6 @@ async function fetchNews(id: string) {
   return response.json();
 }
 
-// export default async function NewsDetail({
-//   params,
-// }: {
-//   params: { id: string };
-// }) {
-//   const news = (await fetch(`http://localhost:3000/api/news?id=${params.id}`, {
-//     cache: "no-store",
-//   }).then((res) => res.json())) as News;
-// const formattedDate = moment(news.date).format("MMMM DD, YYYY");
-
 export default async function newsPost({ params, searchParams }: any) {
   const { id } = params;
 
@@ -104,7 +94,7 @@ export default async function newsPost({ params, searchParams }: any) {
                 />
                 <div>
                   <p className="font-semibold text-gray-200 text-sm">
-                    {news.author?.attributes?.name}
+                    {news.author?.attributes.username}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
                     {formattedDate}

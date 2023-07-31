@@ -21,8 +21,8 @@ interface Conventions {
   title: string;
   author: {
     attributes: {
-      name: string;
-    } | null;
+      username: string;
+    };
   } | null;
   startDate: string;
   endDate: string;
@@ -108,7 +108,7 @@ const Conventions = () => {
                             </div>
                           </div>
                           <h2 className="font-extralight">
-                            Author: {convention.author?.attributes?.name}
+                            Author: {convention.author?.attributes.username}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">

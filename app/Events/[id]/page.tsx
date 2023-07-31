@@ -4,19 +4,6 @@ import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import parse from "html-react-parser";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 
-interface Events {
-  id: number;
-  content: string;
-  attachments: string;
-  title: string;
-  author: {
-    name: string;
-  } | null;
-  startDate: Date;
-  endDate: Date;
-  location: string;
-}
-
 export async function generateStaticParams() {
   const response = await fetch(`http://localhost:3000/api/events`);
 
@@ -92,7 +79,7 @@ export default async function eventsPost({ params, searchParams }: any) {
                 />
                 <div>
                   <p className="font-semibold text-gray-200 text-sm">
-                    {events.author?.name}
+                    {events.author?.attributes.username}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
                     {formattedStartDate} - {formattedEndDate}

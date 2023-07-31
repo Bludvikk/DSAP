@@ -35,8 +35,6 @@ export default async function eventsPost({ params, searchParams }: any) {
   const formattedStartDate = moment(conventions.startDate).format("MMM Do");
   const formattedEndDate = moment(conventions.endDate).format("Do");
 
-  console.log(conventions.author?.attributes?.name);
-
   return (
     <div>
       <div className="max-w-screen-xl mx-auto">
@@ -84,7 +82,7 @@ export default async function eventsPost({ params, searchParams }: any) {
                 />
                 <div>
                   <p className="font-semibold text-gray-200 text-sm">
-                    {conventions.author?.attributes?.name}
+                    {conventions.author?.attributes.username}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
                     {formattedStartDate} - {formattedEndDate}
