@@ -67,13 +67,6 @@ export async function GET(
         where: {
           id: Number(id),
         },
-        include: {
-          author: {
-            select: {
-              attributes: true,
-            },
-          },
-        },
       });
 
       if (!newsItem) {
