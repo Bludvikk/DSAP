@@ -70,7 +70,7 @@ export async function GET(
         include: {
           author: {
             select: {
-              name: true,
+              attributes: true,
             },
           },
         },
@@ -88,7 +88,7 @@ export async function GET(
       include: {
         author: {
           select: {
-            name: true,
+            attributes: true,
           },
         },
       },

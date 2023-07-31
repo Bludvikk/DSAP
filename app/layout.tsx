@@ -10,6 +10,7 @@ import WriteEventModal from "./Components/modal/EventModal";
 import WriteNewsModal from "./Components/modal/NewsModal";
 import WriteConventionModal from "./Components/modal/ConventionModal";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/toaster";
 
 const font = Rubik({
   subsets: ["latin"],
@@ -30,9 +31,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={font.className}>
           <ClientOnly>
-            <WriteEventModal />
-
-            <WriteConventionModal />
+            <Toaster />
             <div className="w-full overflow-x-hidden mx-auto">{children}</div>
           </ClientOnly>
         </body>

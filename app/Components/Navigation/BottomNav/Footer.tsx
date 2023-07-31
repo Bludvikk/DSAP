@@ -13,6 +13,7 @@ import {
 } from "react-icons/md";
 import { PiPaperPlaneRightFill } from "react-icons/pi";
 import Link from "next/link";
+import { SignOutButton } from "@clerk/nextjs";
 
 const Footer = () => {
   return (
@@ -90,6 +91,9 @@ const Footer = () => {
           </div>
           <div className="text-center text-gray-50 text-sm font-normal leading-tight">
             Terms & Conditions
+          </div>
+          <div className="text-center text-gray-50 text-sm font-normal leading-tight">
+            <SignOutButton>Sign Out</SignOutButton>
           </div>
         </div>
         <div className="flex flex-row gap-2 items-center absolute right-[2%]">

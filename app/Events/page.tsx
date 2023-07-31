@@ -2,7 +2,7 @@
 
 import { cache, use, useEffect, useState } from "react";
 import Button from "../Components/Button";
-import useWriteNewsModal from "../hooks/useWriteEventModal";
+import useEventModal from "../hooks/useWriteEventModal";
 import axios from "axios";
 import fetchEvents from "./fetchEvents";
 import Image from "next/image";
@@ -10,6 +10,10 @@ import parse from "html-react-parser";
 import { Content } from "next/font/google";
 import Layout from "../Components/Layout";
 import Link from "next/link";
+import { AiOutlineEdit } from "react-icons/ai";
+import { TfiWrite } from "react-icons/tfi";
+import WriteNewsModal from "../Components/modal/NewsModal";
+import WriteEventModal from "../Components/modal/EventModal";
 
 interface Event {
   id: number;
@@ -17,7 +21,9 @@ interface Event {
   attachments: string;
   title: string;
   author: {
-    name: string;
+    attributes: {
+      name: string;
+    } | null;
   } | null;
   startDate: string;
   endDate: string;
@@ -25,9 +31,11 @@ interface Event {
 }
 
 const Event = () => {
-  const WriteModal = useWriteNewsModal();
+  const WriteModal = useEventModal();
 
   const [events, setEvents] = useState<Event[]>([]);
+
+  const { onOpenForUpdate, newsItemId } = WriteModal;
 
   useEffect(() => {
     async function fetchData() {
@@ -42,13 +50,18 @@ const Event = () => {
 
   return (
     <Layout>
+      <WriteEventModal eventItemId={WriteModal.newsItemId} />
       <div className="flex py-[200px] flex-col h-auto">
         <div className="inline-flex items-center justify-between px-20">
           <div>
             <h1 className="text-3xl text-gray-700 font-semibold">Events</h1>
           </div>
-          <div className="w-36">
-            <Button label="Write Event" onClick={WriteModal.onOpen} />
+          <div
+            onClick={WriteModal.onOpenForNew}
+            className="w-22  md:w-66 h-auto text-teal-500 border-[1px] hover:text-white hover:bg-teal-500 duration-300 transition-colors p-1 rounded-md flex flex-row gap-2 items-center cursor-pointer"
+          >
+            <TfiWrite size={30} />
+            Write
           </div>
         </div>
         <div>
@@ -74,14 +87,26 @@ const Event = () => {
                           />
                         </div>
                         <div className="flex flex-col text-clip w-full">
-                          <Link
-                            href={`/Events/${event.id}`}
-                            className="hover:text-blue-600"
-                          >
-                            {event.title}
-                          </Link>
+                          <div className="flex flex-ol justify-between">
+                            <h1 className="font-semibold hover:underline justify-between  cursor-pointer  text-gray-700 flex flex-row text-md md:font-bold md:text-3xl">
+                              <Link
+                                href={`/Events/${event.id}`}
+                                className="hover:text-blue-600"
+                              >
+                                {event.title}
+                              </Link>
+                            </h1>
+                            <div
+                              className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
+                              onClick={() =>
+                                WriteModal.onOpenForUpdate(event.id)
+                              }
+                            >
+                              <AiOutlineEdit size={30} />
+                            </div>
+                          </div>
                           <h2 className="font-extralight">
-                            Author: {event.author?.name}
+                            Author: {event.author?.attributes?.name}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">

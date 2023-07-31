@@ -2,13 +2,17 @@
 
 import { cache, use, useEffect, useState } from "react";
 import Button from "../Components/Button";
-import useWriteConventionModal from "../hooks/useWriteConventionModal";
+import useConventionsModal from "../hooks/useWriteConventionModal";
 import axios from "axios";
 import fetchConventions from "./fetchConventions";
 import Image from "next/image";
 import parse from "html-react-parser";
 import { Content } from "next/font/google";
 import Layout from "../Components/Layout";
+import { TfiWrite } from "react-icons/tfi";
+import Link from "next/link";
+import { AiOutlineEdit } from "react-icons/ai";
+import WriteConventionModal from "../Components/modal/ConventionModal";
 
 interface Conventions {
   id: number;
@@ -16,7 +20,9 @@ interface Conventions {
   attachments: string;
   title: string;
   author: {
-    name: string;
+    attributes: {
+      name: string;
+    } | null;
   } | null;
   startDate: string;
   endDate: string;
@@ -24,7 +30,9 @@ interface Conventions {
 }
 
 const Conventions = () => {
-  const WriteModal = useWriteConventionModal();
+  const WriteModal = useConventionsModal();
+
+  const { onOpenForUpdate, newsItemId } = WriteModal;
 
   const [conventions, setConventions] = useState<Conventions[]>([]);
 
@@ -41,6 +49,8 @@ const Conventions = () => {
 
   return (
     <Layout>
+      <WriteConventionModal conventionItemId={WriteModal.newsItemId} />
+
       <div className="flex py-[200px] flex-col h-auto">
         <div className="inline-flex items-center justify-between px-12 md:px-20">
           <div>
@@ -48,10 +58,12 @@ const Conventions = () => {
               Conventions
             </h1>
           </div>
-          <div className="w-22 md:w-66 h-auto bg-teal-500 rounded-md">
-            <button className="text-sm md:text-xl p-2 text-white" onClick={WriteModal.onOpen} >
-              Write Conventions
-            </button>
+          <div
+            onClick={WriteModal.onOpenForNew}
+            className="w-22  md:w-66 h-auto text-teal-500 border-[1px] hover:text-white hover:bg-teal-500 duration-300 transition-colors p-1 rounded-md flex flex-row gap-2 items-center cursor-pointer"
+          >
+            <TfiWrite size={30} />
+            Write
           </div>
         </div>
         <div>
@@ -77,11 +89,26 @@ const Conventions = () => {
                           />
                         </div>
                         <div className="flex flex-col text-clip w-full">
-                          <h1 className="font-semibold hover:underline hover:text-blue-600 text-gray-700 text-md md:font-bold md:text-3xl">
-                            {convention.title}
-                          </h1>
+                          <div className="flex flex-ol justify-between">
+                            <h1 className="font-semibold hover:underline justify-between  cursor-pointer  text-gray-700 flex flex-row text-md md:font-bold md:text-3xl">
+                              <Link
+                                href={`/Conventions/${convention.id}`}
+                                className="hover:text-blue-600"
+                              >
+                                {convention.title}
+                              </Link>
+                            </h1>
+                            <div
+                              className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
+                              onClick={() =>
+                                WriteModal.onOpenForUpdate(convention.id)
+                              }
+                            >
+                              <AiOutlineEdit size={30} />
+                            </div>
+                          </div>
                           <h2 className="font-extralight">
-                            Author: {convention.author?.name}
+                            Author: {convention.author?.attributes?.name}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">

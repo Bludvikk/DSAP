@@ -1,15 +1,20 @@
+// useNewsModal.ts
 import { create } from "zustand";
 
-interface ConventionStore {
+interface ConventionsModal {
   isOpen: boolean;
-  onOpen: () => void;
+  newsItemId: number | null;
+  onOpenForNew: () => void; // Function to open the modal for new news items
+  onOpenForUpdate: (newsItemId: number) => void; // Function to open the modal for updating news items
   onClose: () => void;
 }
 
-const useWriteConventionModal = create<ConventionStore>((set) => ({
+const useConventionsModal = create<ConventionsModal>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false }),
+  newsItemId: null,
+  onOpenForNew: () => set({ isOpen: true, newsItemId: null }), // Set newsItemId to null for new items
+  onOpenForUpdate: (newsItemId) => set({ isOpen: true, newsItemId }), // Set the provided newsItemId for updates
+  onClose: () => set({ isOpen: false, newsItemId: null }),
 }));
 
-export default useWriteConventionModal;
+export default useConventionsModal;

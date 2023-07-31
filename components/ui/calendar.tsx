@@ -21,6 +21,7 @@ function Calendar({
   const disabledDays = {
     before: today,
   };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}

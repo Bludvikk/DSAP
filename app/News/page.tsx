@@ -21,7 +21,9 @@ interface News {
   attachments: string;
   title: string;
   author: {
-    name: string;
+    attributes: {
+      name: string;
+    } | null;
   } | null;
   date: Date;
 }
@@ -122,7 +124,7 @@ const NewsPage = () => {
                             </div>
                           </div>
                           <h2 className="font-extralight">
-                            Author: {news.author?.name}
+                            Author: {news.author?.attributes?.name}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">

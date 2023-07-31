@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import toast, { Toast } from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Controller,
   FieldValues,
@@ -20,7 +20,12 @@ import "react-quill/dist/quill.snow.css";
 import { DatePickerDemo } from "../Input/DatePicker";
 import Image from "next/image";
 
-const WriteConventionModal = () => {
+interface WriteConventionModalProps {
+  conventionItemId: number | null;
+}
+const WriteConventionModal = ({
+  conventionItemId,
+}: WriteConventionModalProps) => {
   const {
     handleSubmit,
     register,
@@ -38,7 +43,7 @@ const WriteConventionModal = () => {
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const { toast } = useToast();
   const WriteModal = useWriteConventionModal();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -78,9 +83,6 @@ const WriteConventionModal = () => {
     }
   }, [imageUrl]);
 
-  const attachments = watch("attachments");
-
-  console.log(attachments);
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
@@ -88,11 +90,17 @@ const WriteConventionModal = () => {
     axios
       .post("/api/conventions", data)
       .then(() => {
-        toast.success("Event Posted!");
+        toast({
+          title: "Successfully added convention",
+          description: `Convention Title ${getValues("title")}`,
+        });
         WriteModal.onClose();
       })
       .catch((error) => {
-        toast.error(error);
+        toast({
+          title: `Error Adding Convention `,
+          description: `${error.message}`,
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -100,6 +108,57 @@ const WriteConventionModal = () => {
 
     // Handle the response, e.g., show success message, redirect, etc.
   };
+
+  const onUpdate: SubmitHandler<FieldValues> = (data) => {
+    if (!conventionItemId) {
+      console.error("EventItemID is missing for update");
+      return;
+    }
+
+    setIsLoading(true);
+
+    axios
+      .put(`api/conventions?id=${conventionItemId}`, data)
+      .then(() => {
+        toast({
+          title: "Successfully Updated Event",
+        });
+        WriteModal.onClose();
+      })
+      .catch((error) => {
+        toast({
+          title: "Error Updating Convention",
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (conventionItemId) {
+      // Fetch the news item by its ID from your backend API
+      // Update the below API endpoint to match your actual backend endpoint for fetching a single news item
+      axios
+        .get(`/api/conventions?id=${conventionItemId}`)
+        .then((response) => {
+          const existingConventionItem = response.data; // Assuming your API response returns the existing news item
+          if (existingConventionItem) {
+            // Set the form fields' initial values with the existing data
+            setValue("title", existingConventionItem.title);
+            setValue("attachments", existingConventionItem.attachments);
+            setValue("content", existingConventionItem.content);
+            setValue("location", existingConventionItem.location);
+            // ... set other form field values ...
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching existing news item:", error);
+        });
+    }
+  }, [conventionItemId, setValue]);
+
+  const handleSubmitFunction = conventionItemId ? onUpdate : onSubmit;
 
   const handleDiscard = () => {
     setSelectedFile(null);
@@ -231,9 +290,9 @@ const WriteConventionModal = () => {
       disabled={isLoading}
       isOpen={WriteModal.isOpen}
       title="Post a Convention"
-      actionLabel="POST"
+      actionLabel={conventionItemId === null ? "POST" : "UPDATE"}
       onClose={WriteModal.onClose}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleSubmitFunction)}
       body={bodyContent}
     />
   );

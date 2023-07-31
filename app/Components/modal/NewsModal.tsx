@@ -12,7 +12,7 @@ import axios from "axios";
 import Modal from "./Modal";
 import Input from "../Input/input";
 import Heading from "../Heading";
-
+import { useToast } from "@/components/ui/use-toast";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { DatePickerDemo } from "../Input/DatePicker";
@@ -39,6 +39,7 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
     mode: "onChange",
   });
 
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const WriteModal = useNewsModal();
@@ -87,11 +88,16 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
     axios
       .post("api/news", data)
       .then(() => {
-        toast.success("News Posted!");
+        toast({
+          title: "Successfully added News",
+          description: `Convention Title ${getValues("title")}`,
+        });
         WriteModal.onClose();
       })
       .catch((error) => {
-        toast.error(error);
+        toast({
+          title: "Error Adding Convention",
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -109,11 +115,16 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
     axios
       .put(`api/news?id=${newsItemId}`, data) // Use the newsItemId for the update
       .then(() => {
-        toast.success("News Updated!");
+        toast({
+          title: "Successfully Updated News",
+        });
         WriteModal.onClose();
       })
       .catch((error) => {
-        toast.error(error);
+        toast({
+          title: "Error Updating News",
+          description: `${error.message}`,
+        });
       })
       .finally(() => {
         setIsLoading(false);
@@ -144,6 +155,11 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
 
   const handleSubmitFunction = newsItemId ? onUpdate : onSubmit;
 
+  const handleDiscard = () => {
+    setSelectedFile(null);
+    setImageUrl("");
+  };
+
   const bodyContent = (
     <div className="flex flex-col h-[600px] gap-6 overflow-auto ">
       <div className="flex flex-col items-start justify-center">
@@ -160,26 +176,36 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
           Upload file
         </label>
         <div className="flex-row flex w-full justify-between items-center border-[1px] rounded-md px-2 py-2">
-          <input
-            id="file_input"
-            {...register("attachments")}
-            type="file"
-            onChange={handleFileChange}
-          />
-
-          {imageUrl && (
-            <div className="flex-col flex items-center justify-start">
-              <Image
+          {selectedFile ? (
+            <div className="flex flex-col items-center justify-start">
+              <img
                 src={imageUrl}
-                width={100}
-                height={100}
                 alt="Uploaded file"
                 className="h-[60px] w-auto"
-                priority
-                placeholder="blur"
-                blurDataURL={imageUrl}
               />
+              <div className="mt-2 flex space-x-4">
+                <button
+                  type="button"
+                  onClick={handleDiscard}
+                  className="bg-red-500 hover:bg-red-600 px-3 py-1 text-white rounded-md"
+                >
+                  Discard
+                </button>
+                <input
+                  id="file_input"
+                  {...register("attachments")}
+                  type="file"
+                  onChange={handleFileChange}
+                />
+              </div>
             </div>
+          ) : (
+            <input
+              id="file_input"
+              {...register("attachments")}
+              type="file"
+              onChange={handleFileChange}
+            />
           )}
         </div>
       </div>

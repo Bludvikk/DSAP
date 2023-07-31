@@ -1,7 +1,7 @@
 "use client";
 
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
-import toast, { Toast } from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Controller,
   FieldValues,
@@ -22,7 +22,10 @@ import Image from "next/image";
 import { revalidateTag } from "next/cache";
 import { useRouter } from "next/navigation";
 
-const WriteEventModal = () => {
+interface WriteEventModalProps {
+  eventItemId: number | null;
+}
+const WriteEventModal = ({ eventItemId }: WriteEventModalProps) => {
   const {
     handleSubmit,
     register,
@@ -39,8 +42,9 @@ const WriteEventModal = () => {
     },
     mode: "onChange",
   });
+  const { toast } = useToast();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -60,7 +64,7 @@ const WriteEventModal = () => {
         formData.append("upload_preset", "my_upload");
         const response = await axios.post(
           `https://api.cloudinary.com/v1_1/dsap/image/upload`,
-          formData,
+          formData
         );
 
         console.log(response);
@@ -74,7 +78,6 @@ const WriteEventModal = () => {
         console.error("Error uploading image:", error);
       }
     }
-
   };
 
   useEffect(() => {
@@ -89,7 +92,7 @@ const WriteEventModal = () => {
   console.log(attachments);
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
-  
+
     // Send the event data to your endpoint
     fetch("/api/events", {
       method: "POST",
@@ -100,24 +103,85 @@ const WriteEventModal = () => {
     })
       .then((response) => {
         if (response.ok) {
-          toast.success("Event Posted!");
+          toast({
+            title: "Successfully posted a new Event!",
+            description: `Event Title ${getValues("title")}`,
+          });
           WriteModal.onClose();
           reset(),
-          // Handle the response, e.g., show success message, redirect, etc.
-         router.replace('/Events')
+            // Handle the response, e.g., show success message, redirect, etc.
+            router.replace("/Events");
         } else {
           throw new Error("Error posting the event.");
         }
       })
       .catch((error) => {
-        toast.error(error.message);
+        toast({
+          title: "Error posting an event",
+        });
       })
       .finally(() => {
         setIsLoading(false);
       });
   };
-  
-  
+
+  const onUpdate: SubmitHandler<FieldValues> = (data) => {
+    if (!eventItemId) {
+      console.error("EventItemID is missing for update");
+      return;
+    }
+
+    setIsLoading(true);
+
+    axios
+      .put(`api/events?id=${eventItemId}`, data)
+      .then(() => {
+        toast({
+          title: "Successfully Updated Event",
+        });
+        WriteModal.onClose();
+      })
+      .catch((error) => {
+        toast({
+          title: "Error Updating Event",
+          description: `${error.message}`,
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    if (eventItemId) {
+      // Fetch the news item by its ID from your backend API
+      // Update the below API endpoint to match your actual backend endpoint for fetching a single news item
+      axios
+        .get(`/api/events?id=${eventItemId}`)
+        .then((response) => {
+          const existingEventItem = response.data; // Assuming your API response returns the existing news item
+          if (existingEventItem) {
+            // Set the form fields' initial values with the existing data
+            setValue("title", existingEventItem.title);
+            setValue("attachments", existingEventItem.attachments);
+            setValue("content", existingEventItem.content);
+            setValue("location", existingEventItem.location);
+            // ... set other form field values ...
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching existing news item:", error);
+        });
+    }
+  }, [eventItemId, setValue]);
+
+  const handleSubmitFunction = eventItemId ? onUpdate : onSubmit;
+
+  const handleDiscard = () => {
+    setSelectedFile(null);
+    setImageUrl("");
+  };
+
   const bodyContent = (
     <div className="flex flex-col h-[600px] self-stretch gap-6 overflow-x-hidden overflow-y-scroll ">
       <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
@@ -157,24 +221,36 @@ const WriteEventModal = () => {
           Upload file
         </label>
         <div className="flex-row flex w-full justify-between items-center border-[1px] rounded-md px-2 py-2">
-          <input
-            id="file_input"
-            {...register("attachments")}
-            type="file"
-            onChange={handleFileChange}
-          />
-
-          {imageUrl && (
-            <div className="flex-col flex items-center justify-start">
-              <Image
+          {selectedFile ? (
+            <div className="flex flex-col items-center justify-start">
+              <img
                 src={imageUrl}
-                width={100}
-                height={100}
                 alt="Uploaded file"
                 className="h-[60px] w-auto"
-                priority
               />
+              <div className="mt-2 flex space-x-4">
+                <button
+                  type="button"
+                  onClick={handleDiscard}
+                  className="bg-red-500 hover:bg-red-600 px-3 py-1 text-white rounded-md"
+                >
+                  Discard
+                </button>
+                <input
+                  id="file_input"
+                  {...register("attachments")}
+                  type="file"
+                  onChange={handleFileChange}
+                />
+              </div>
             </div>
+          ) : (
+            <input
+              id="file_input"
+              {...register("attachments")}
+              type="file"
+              onChange={handleFileChange}
+            />
           )}
         </div>
       </div>
@@ -226,9 +302,9 @@ const WriteEventModal = () => {
       disabled={isLoading}
       isOpen={WriteModal.isOpen}
       title="Create an Event"
-      actionLabel="POST"
+      actionLabel={eventItemId === null ? "POST" : "UPDATE"}
       onClose={WriteModal.onClose}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleSubmitFunction)}
       body={bodyContent}
     />
   );
