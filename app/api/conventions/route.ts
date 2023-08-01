@@ -2,7 +2,6 @@
 
 import { prisma } from '@/lib/prisma'
 
-import type { WebhookEvent } from '@clerk/nextjs/dist/types/server';
 import { NextApiResponse } from 'next';
 
 
@@ -59,7 +58,10 @@ export async function PUT(request: Request, response: NextApiResponse) {
 }
 
 
-export async function GET(request: Request, response: NextApiResponse) {
+export async function GET(
+  request: Request,
+  response: NextApiResponse)
+ {
 
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')
@@ -70,31 +72,16 @@ export async function GET(request: Request, response: NextApiResponse) {
         where: {
           id: Number(id),
         },
-        include: {
-          author: {
-            select: {
-              attributes: true,
-            }
-          }
-        }
       });
 
 
       if(!conventionItem) {
-        return NextResponse.error()
+        return NextResponse.json({ error: 'Internal Server Error'}, {status: 500})
       }
 
       return NextResponse.json(conventionItem)
     }
-    const conventions = await prisma.conventions.findMany({
-      include: {
-        author: {
-          select: {
-            attributes: true,
-          }
-        }
-      }
-    });
+    const conventions = await prisma.conventions.findMany();
 
     return NextResponse.json(conventions);
   } catch (error) {

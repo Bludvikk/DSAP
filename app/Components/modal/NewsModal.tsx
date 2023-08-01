@@ -18,6 +18,7 @@ import "react-quill/dist/quill.snow.css";
 import { DatePickerDemo } from "../Input/DatePicker";
 import Image from "next/image";
 import useNewsModal from "@/app/hooks/useNewsModal";
+import { useRouter } from "next/navigation";
 
 interface WriteNewsModalProps {
   newsItemId: number | null;
@@ -30,15 +31,16 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
     setValue,
     watch,
     control,
+    reset,
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
       author: {
         attributes: {
-          username: "admin-3",
+          username: "Admin",
         },
       },
-      userId: 2,
+      userId: 1,
     },
     mode: "onChange",
   });
@@ -48,6 +50,7 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
 
   const WriteModal = useNewsModal();
 
+  const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [imageUrl, setImageUrl] = useState<string>("");
@@ -89,18 +92,31 @@ const WriteNewsModal = ({ newsItemId }: WriteNewsModalProps) => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    axios
-      .post("api/news", data)
-      .then(() => {
-        toast({
-          title: "Successfully added News",
-          description: `Convention Title ${getValues("title")}`,
-        });
-        WriteModal.onClose();
+    // Send the event data to your endpoint
+    fetch("/api/news", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data), // Pass the data object here
+    })
+      .then((response) => {
+        if (response.ok) {
+          toast({
+            title: "Successfully posted a new News!",
+            description: `Event Title ${getValues("title")}`,
+          });
+          WriteModal.onClose();
+          reset(),
+            // Handle the response, e.g., show success message, redirect, etc.
+            router.replace("/News");
+        } else {
+          throw new Error("Error posting the event.");
+        }
       })
       .catch((error) => {
         toast({
-          title: "Error Adding Convention",
+          title: "Error posting News",
         });
       })
       .finally(() => {

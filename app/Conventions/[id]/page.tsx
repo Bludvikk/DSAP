@@ -10,7 +10,7 @@ import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 //   const conventionsResponse = await response.json();
 
 //   return conventionsResponse.map((conventions: any) => ({
-//     id: String(conventions.id),
+//     id: Number(conventions.id),
 //   }));
 // }
 
@@ -82,7 +82,7 @@ export default async function eventsPost({ params, searchParams }: any) {
                 />
                 <div>
                   <p className="font-semibold text-gray-200 text-sm">
-                    {conventions.author?.attributes.username}
+                    {/* {conventions.author?.attributes.username} */}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
                     {formattedStartDate} - {formattedEndDate}

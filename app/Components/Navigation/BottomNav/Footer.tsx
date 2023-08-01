@@ -18,7 +18,7 @@ import { SignOutButton } from "@clerk/nextjs";
 const Footer = () => {
   return (
     <div className="w-full h-full flex-col justify-start items-start inline-flex">
-      <div className="self-stretch px-20 py-12 rounded-t-xl bg-teal-400 justify-between items-start">
+      <div className="self-stretch px-20 py-12 rounded-t-xl bg-gradient-to-b from-teal-200 via-teal-300 to-teal-400 justify-between items-start">
         <div className="justify-start items-center gap-[420px] flex flex-row">
           <div className="flex flex-col gap-3">
             <div className="justify-start items-center gap-3 inline-flex">
@@ -33,7 +33,7 @@ const Footer = () => {
                 Drugstores Association of the Philippines Inc.
               </div>
             </div>
-            <div className="justify-start items-end gap-3 inline-flex">
+            <div className="md:justify-start justify-center md:items-start gap-3 inline-flex">
               <div className="w-8 h-8 relative">
                 <MdOutlineFacebook
                   size={30}

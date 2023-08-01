@@ -36,11 +36,12 @@ const WriteConventionModal = ({
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      author: "Admin",
       userId: 1,
     },
     mode: "onChange",
   });
+
+  console.log(getValues("userId"));
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toast } = useToast();

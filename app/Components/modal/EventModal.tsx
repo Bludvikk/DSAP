@@ -21,7 +21,6 @@ import { DatePickerDemo } from "../Input/DatePicker";
 import Image from "next/image";
 import { revalidateTag } from "next/cache";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@clerk/nextjs";
 
 interface WriteEventModalProps {
   eventItemId: number | null;
@@ -39,7 +38,7 @@ const WriteEventModal = ({ eventItemId }: WriteEventModalProps) => {
   } = useForm<FieldValues>({
     defaultValues: {
       author: {
-        attachments: {
+        attributes: {
           username: "Admin",
         },
       },

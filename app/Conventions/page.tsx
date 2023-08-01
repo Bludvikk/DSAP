@@ -13,17 +13,18 @@ import { TfiWrite } from "react-icons/tfi";
 import Link from "next/link";
 import { AiOutlineEdit } from "react-icons/ai";
 import WriteConventionModal from "../Components/modal/ConventionModal";
+import { useAuth } from "@clerk/nextjs";
 
 interface Conventions {
   id: number;
   content: string;
   attachments: string;
   title: string;
-  author: {
-    attributes: {
-      username: string;
-    };
-  } | null;
+  // author: {
+  //   attributes: {
+  //     username: string;
+  //   };
+  // } | null;
   startDate: string;
   endDate: string;
   location: string;
@@ -36,12 +37,50 @@ const Conventions = () => {
 
   const [conventions, setConventions] = useState<Conventions[]>([]);
 
+  const [roleId, setRoleId] = useState<number | null>(null);
+  const [useRole, setUserRole] = useState<string>("");
+
+  const { userId } = useAuth();
+  const externalId = userId;
+
+  const getUserInfo = async (externalId: string) => {
+    try {
+      const response = await fetch(`api/user?externalId=${externalId}`);
+      if (response.ok) {
+        const userData = await response.json();
+        setRoleId(userData.roleId);
+      } else {
+        console.error("error fetching user");
+      }
+    } catch (error) {
+      console.error("error fetching user Information", error);
+    }
+  };
+
+  useEffect(() => {
+    if (roleId === 3) {
+      setUserRole("Admin");
+    } else if (roleId === 4) {
+      setUserRole("Regular User");
+    } else {
+      setUserRole("Unknown");
+    }
+  }, [roleId]);
+
+  useEffect(() => {
+    if (externalId) {
+      getUserInfo(externalId);
+    }
+  }, [externalId]);
+
   useEffect(() => {
     async function fetchData() {
       try {
         const conventionsData = await fetchConventions();
         setConventions(conventionsData);
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     fetchData();
@@ -58,13 +97,15 @@ const Conventions = () => {
               Conventions
             </h1>
           </div>
-          <div
-            onClick={WriteModal.onOpenForNew}
-            className="w-22  md:w-66 h-auto text-teal-500 border-[1px] hover:text-white hover:bg-teal-500 duration-300 transition-colors p-1 rounded-md flex flex-row gap-2 items-center cursor-pointer"
-          >
-            <TfiWrite size={30} />
-            Write
-          </div>
+          {roleId && (
+            <div
+              onClick={WriteModal.onOpenForNew}
+              className="w-22  md:w-66 h-auto text-teal-500 border-[1px] hover:text-white hover:bg-teal-500 duration-300 transition-colors p-1 rounded-md flex flex-row gap-2 items-center cursor-pointer"
+            >
+              <TfiWrite size={30} />
+              Write
+            </div>
+          )}
         </div>
         <div>
           <div>
@@ -78,7 +119,7 @@ const Conventions = () => {
                     key={convention.id}
                   >
                     <div className="flex-col flex border-[1px] hover:animate-pulse cursor-pointer  transition duration-700 shadow-md h-[360px] rounded-lg">
-                      <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
+                      <div className="witems-start justify-start gap-8 p-4 flex-col md:flex-row flex">
                         <div className="relative">
                           <Image
                             src={convention.attachments}
@@ -98,18 +139,18 @@ const Conventions = () => {
                                 {convention.title}
                               </Link>
                             </h1>
-                            <div
-                              className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
-                              onClick={() =>
-                                WriteModal.onOpenForUpdate(convention.id)
-                              }
-                            >
-                              <AiOutlineEdit size={30} />
-                            </div>
+                            {roleId === 3 && (
+                              <div
+                                className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
+                                onClick={() =>
+                                  WriteModal.onOpenForUpdate(convention.id)
+                                }
+                              >
+                                <AiOutlineEdit size={30} />
+                              </div>
+                            )}
                           </div>
-                          <h2 className="font-extralight">
-                            Author: {convention.author?.attributes.username}
-                          </h2>
+                          <h2 className="font-extralight">Author:</h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">
                               {parse(initialSentences)}
@@ -121,9 +162,6 @@ const Conventions = () => {
                   </div>
                 );
               })}
-            <div></div>
-            <div></div>
-            <div></div>
           </div>
         </div>
       </div>

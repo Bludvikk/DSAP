@@ -6,15 +6,13 @@ import useNewsModal from "../hooks/useNewsModal";
 import Image from "next/image";
 import parse from "html-react-parser";
 import fetchNews from "./fetchNews";
-import Button from "../Components/Button";
 import Layout from "../Components/Layout";
-import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
 import WriteNewsModal from "../Components/modal/NewsModal";
 import { TfiWrite } from "react-icons/tfi";
-import { FaPencilAlt } from "react-icons/fa";
 import { AiOutlineEdit } from "react-icons/ai";
+import { useAuth, useUser } from "@clerk/nextjs";
 interface News {
   id: number;
   content: string;
@@ -23,35 +21,64 @@ interface News {
   author: {
     attributes: {
       username: string;
-    } | null;
+    };
   } | null;
   date: Date;
 }
 
 const NewsPage = () => {
   const WriteModal = useNewsModal();
-
   const { onOpenForUpdate, newsItemId } = WriteModal;
 
   const [news, setNews] = useState<News[]>([]);
+
+  const [roleId, setRoleId] = useState<number | null>(null);
+  const [useRole, setUserRole] = useState<string>("");
+
+  const { userId } = useAuth();
+  const externalId = userId;
+
+  const getUserInfo = async (externalId: string) => {
+    try {
+      const response = await fetch(`api/user?externalId=${externalId}`);
+      if (response.ok) {
+        const userData = await response.json();
+        setRoleId(userData.roleId);
+      } else {
+        console.error("error fetching user");
+      }
+    } catch (error) {
+      console.error("error fetching user Information", error);
+    }
+  };
+
   useEffect(() => {
-    async function fetchNews() {
+    if (roleId === 3) {
+      setUserRole("Admin");
+    } else if (roleId === 4) {
+      setUserRole("Regular User");
+    } else {
+      setUserRole("Unknown");
+    }
+  }, [roleId]);
+
+  useEffect(() => {
+    if (externalId) {
+      getUserInfo(externalId);
+    }
+  }, [externalId]);
+
+  useEffect(() => {
+    async function fetchData() {
       try {
-        const response = await fetch("/api/news", {
-          next: { revalidate: 10 },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setNews(data);
-        } else {
-          throw new Error(response.statusText);
-        }
+        const conventionsData = await fetchNews();
+        setNews(conventionsData);
       } catch (error) {
         console.error(error);
       }
     }
 
-    fetchNews();
+    fetchData();
   }, []);
 
   return (
@@ -64,13 +91,15 @@ const NewsPage = () => {
               News
             </h1>
           </div>
-          <div
-            onClick={WriteModal.onOpenForNew}
-            className="w-22  md:w-66 h-auto text-teal-500 border-[1px] hover:text-white hover:bg-teal-500 duration-300 transition-colors p-1 rounded-md flex flex-row gap-2 items-center cursor-pointer"
-          >
-            <TfiWrite size={30} />
-            Write
-          </div>
+          {roleId === 3 && (
+            <div
+              onClick={WriteModal.onOpenForNew}
+              className="w-22  md:w-66 h-auto text-teal-500 border-[1px] hover:text-white hover:bg-teal-500 duration-300 transition-colors p-1 rounded-md flex flex-row gap-2 items-center cursor-pointer"
+            >
+              <TfiWrite size={30} />
+              Write
+            </div>
+          )}
         </div>
         <div>
           <div>
@@ -114,17 +143,19 @@ const NewsPage = () => {
                                 {news.title}
                               </Link>
                             </h1>
-                            <div
-                              className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
-                              onClick={() =>
-                                WriteModal.onOpenForUpdate(news.id)
-                              }
-                            >
-                              <AiOutlineEdit size={30} />
-                            </div>
+                            {roleId === 3 && (
+                              <div
+                                className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
+                                onClick={() =>
+                                  WriteModal.onOpenForUpdate(news.id)
+                                }
+                              >
+                                <AiOutlineEdit size={30} />
+                              </div>
+                            )}
                           </div>
                           <h2 className="font-extralight">
-                            Author: {news.author?.attributes?.username}
+                            Author: {news.author?.attributes.username}
                           </h2>
                           <div className="pt-5 md:pt-10 mb-auto">
                             <div className="opacity-50">

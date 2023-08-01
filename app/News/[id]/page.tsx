@@ -24,8 +24,6 @@ async function fetchNews(id: string) {
     next: { revalidate: 10 },
   });
 
-  console.log("fetching news posts with id", id);
-
   return response.json();
 }
 
@@ -72,8 +70,7 @@ export default async function newsPost({ params, searchParams }: any) {
                 News
               </a>
               <h2 className="text-4xl font-semibold text-gray-100 leading-tight">
-                Pellentesque a consectetur velit, ac molestie ipsum. Donec
-                sodales, massa et auctor.
+                {news.title}
               </h2>
               <div className="flex mt-3">
                 <img
@@ -93,7 +90,7 @@ export default async function newsPost({ params, searchParams }: any) {
             </div>
           </div>
           <div className="px-4 lg:px-0 mt-12 text-gray-700 max-w-screen-md mx-auto text-lg leading-relaxed">
-            <div className="pb-20">{parse(news.content)}</div>
+            {/* <div className="pb-20">{parse(news.content)}</div> */}
           </div>
         </main>
       </div>

@@ -1,11 +1,55 @@
 
 
-import { prisma } from '@/lib/prisma'
-import { error } from 'console';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '../../../lib/prisma';
+import { NextApiResponse } from 'next';
 
 
 import { NextResponse } from 'next/server'
+
+
+
+export async function GET(request: Request, response: NextApiResponse) {
+
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  try {
+    if (id) {
+      const newsItem = await prisma.news.findUnique({
+        where: {
+          id: Number(id),
+        },
+        include: {
+          author: {
+            select: {
+              attributes: true
+            },
+          },
+        },
+      });
+
+      if (!newsItem) {
+        return NextResponse.error;
+      }
+
+      return NextResponse.json(newsItem);
+    }
+    const news = await prisma.news.findMany({
+      include: {
+        author: {
+          select: {
+            attributes: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(news);
+  } catch (error) {
+    console.error("Error fetching news:", error);
+    return NextResponse.json(error);
+  }
+}
 
 
 export async function PUT(request: Request, response: NextApiResponse) {
@@ -13,7 +57,7 @@ export async function PUT(request: Request, response: NextApiResponse) {
   const id = searchParams.get('id');
 
   if (!id) {
-    return NextResponse.error();
+    return NextResponse.json( {error: 'does not have ID' })
   }
 
   try {
@@ -24,7 +68,7 @@ export async function PUT(request: Request, response: NextApiResponse) {
     });
 
     if (!existingNewsItem) {
-      return NextResponse.error();
+      return NextResponse.json({ error: 'No news item'})
     }
 
     // Parse the request body for the updated news item data
@@ -48,57 +92,11 @@ export async function PUT(request: Request, response: NextApiResponse) {
     return NextResponse.json(updatedNewsItem);
   } catch (error) {
     console.error('Error updating news item:', error);
-    return response.json(error);
+    return NextResponse.json(error);
   }
 }
 
-export async function GET(
-  request: Request,
-  response: NextApiResponse
-) {
-  
-  const { searchParams } = new URL(request.url)
-  const id = searchParams.get('id')
 
-  try {
-    if (id) {
-      
-      const newsItem = await prisma.news.findUnique({
-        where: {
-          id: Number(id),
-        },
-        include: {
-          author: {
-            select: {
-              attributes: true,
-            },
-          },
-        },
-      });
-
-      if (!newsItem) {
-        
-        return NextResponse.error
-      }
-
-      return NextResponse.json(newsItem)
-    }
-
-     const newsItems = await prisma.news.findMany({
-      include: {
-        author: {
-          select: {
-            attributes: true,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json(newsItems)
-  } catch (error) {
-    
-  }
-}
 
 export async function POST(request: Request) {
 
