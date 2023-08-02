@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Switch } from "@headlessui/react";
 import { ChevronDownIcon } from "lucide-react";
 import Footer from "../Components/Navigation/BottomNav/Footer";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Input from "../Components/Input/input";
 import NavigationBar from "../Components/Navigation/BottomNav/NavigationBar";
 import { useRouter } from "next/router";
+import { useToast } from "@/components/ui/use-toast";
 
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(" ");
@@ -15,7 +16,8 @@ function classNames(...classes: string[]): string {
 
 export default function Example() {
   const [agreed, setAgreed] = useState<boolean>(false);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { toast } = useToast();
   const {
     handleSubmit,
     register,
@@ -27,6 +29,36 @@ export default function Example() {
   });
 
   console.log(getValues());
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    setIsLoading(true);
+
+    fetch("/api/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.ok) {
+          toast({
+            title: "Email Sent Successfully",
+          });
+          reset();
+        } else {
+          throw new Error("Error sending email");
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: "Error sending email",
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   return (
     <div className="flex flex-col">
@@ -66,8 +98,7 @@ export default function Example() {
               </p>
             </div>
             <form
-              action="#"
-              method="POST"
+              onSubmit={handleSubmit(onSubmit)}
               className="mx-auto mt-16 max-w-xl sm:mt-20"
             >
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
