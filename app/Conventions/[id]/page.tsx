@@ -17,7 +17,7 @@ import url from "@/utils/getUrl";
 
 async function fetchConventions(id: string) {
   const response = await fetch(
-    `${url}/api/conventions?id=${id}`,
+    `${url.api}/api/conventions?id=${id}`,
     {
       next: { revalidate: 10 },
     }
