@@ -11,7 +11,7 @@ import { motion } from 'framer-motion'
 export default function Home() {
   return (
     <Layout>
-      <div className="flex pt-[166px] flex-col  h-full w-full">
+      <div className="flex pt-[144px] flex-col  h-full w-full">
         <div className="h-auto relative items-start md:items-center justify-center ">
           <Image
             src="/images/dsap-sample-imgs/main.jpg"

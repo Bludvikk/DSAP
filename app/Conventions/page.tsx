@@ -83,7 +83,7 @@ const Conventions = () => {
       }
       setIsLoading(false);
       fetchData();
-    }, 3000);
+    }, 1000);
   }, []);
 
   return (

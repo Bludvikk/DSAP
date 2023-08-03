@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import useNewsModal from "../hooks/useNewsModal";
 
 import Image from "next/image";
@@ -71,7 +71,7 @@ const NewsPage = () => {
   }, [externalId]);
 
   useEffect(() => {
-    setTimeout(() => {
+
       fetch(`api/news`, { next: { revalidate: 10 } })
         .then((response) => {
           if (!response.ok) {
@@ -86,7 +86,6 @@ const NewsPage = () => {
           console.log(err.message);
         });
       setIsLoading(false);
-    }, 3000);
   }, []);
 
   return (
@@ -111,10 +110,9 @@ const NewsPage = () => {
         </div>
         <div>
           <div>
-            {isLoading ? (
-              <SkeletonComponent />
-            ) : (
-              news.length > 0 &&
+          <Suspense fallback={ <SkeletonComponent /> }>
+
+              {news.length > 0 &&
               news.map((news) => {
                 const formattedDate = moment(news.date).format("MMM - Do");
 
@@ -142,7 +140,12 @@ const NewsPage = () => {
                   </div>
                 );
               })
-            )}
+            }
+
+          </Suspense>
+              
+
+              
           </div>
         </div>
       </div>
