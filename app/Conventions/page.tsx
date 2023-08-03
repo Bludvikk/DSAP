@@ -134,7 +134,7 @@ const Conventions = () => {
                       attachments={convention.attachments}
                       content={parse(initialSentences)}
                       modal={WriteModal.onOpenForUpdate}
-                      page={"Conventions"}
+                      page="Conventions"
                       role={roleId}
                       title={convention.title}
                       startDate={formattedStartDate}
