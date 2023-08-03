@@ -52,12 +52,7 @@ const ContentCard = ({
   const formattedEndDate = moment(endDate).format("Do");
 
   return (
-    <motion.div
-    initial={{ x: "1200px" }}
-    whileInView={{ x: "0" }}
-    transition={{ duration: 0.5, type: "spring"}}
-      className="flex-col flex border-[1px] shadow-md h-[auto] rounded-lg"
-    >
+    <motion.div className="flex-col flex border-[1px] shadow-md h-[auto] rounded-lg">
       <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
         <div className="relative">
           <Image
