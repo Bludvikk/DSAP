@@ -80,16 +80,14 @@ const Event = () => {
   }, [externalId]);
 
   useEffect(() => {
-    setTimeout(() => {
-      async function fetchData() {
-        try {
-          const eventsData = await fetchEvents();
-          setEvents(eventsData);
-        } catch (error) {}
-      }
-      setIsLoading(false);
-      fetchData();
-    }, 1000);
+    async function fetchData() {
+      try {
+        const eventsData = await fetchEvents();
+        setEvents(eventsData);
+      } catch (error) {}
+    }
+    setIsLoading(false);
+    fetchData();
   }, []);
 
   return (
