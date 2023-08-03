@@ -91,7 +91,7 @@ export default async function newsPost({ params, searchParams }: any) {
             </div>
           </div>
           <div className="px-4 lg:px-0 mt-12 text-gray-700 max-w-screen-md mx-auto text-lg leading-relaxed">
-            {/* <div className="pb-20">{parse(news.content)}</div> */}
+            <div className="pb-20">{parse(news.content)}</div>
           </div>
         </main>
       </div>

@@ -27,7 +27,7 @@ async function fetchEvents(id: string) {
 
 export default async function eventsPost({ params, searchParams }: any) {
   const { id } = params;
-
+ 
   const events = await fetchEvents(id);
 
   const formattedStartDate = moment(events.startDate).format("MMM Do");
