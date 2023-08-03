@@ -2,6 +2,7 @@ import Button from "@/app/Components/Button";
 import Layout from "@/app/Components/Layout";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 import useWriteNewsModal from "@/app/hooks/useWriteEventModal";
+import url from "@/utils/getUrl";
 import parse from "html-react-parser";
 import moment from "moment";
 import Image from "next/image";
@@ -9,18 +10,18 @@ import Link from "next/link";
 import React from "react";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 
-// export async function generateStaticParams() {
-//   const response = await fetch(`http://localhost:3000/api/news`);
+export async function generateStaticParams() {
+  const response = await fetch(`${url.api}/api/news`);
 
-//   const newsResponse = await response.json();
+  const newsResponse = await response.json();
 
-//   return newsResponse.map((news: any) => ({
-//     id: String(news.id),
-//   }));
-// }
+  return newsResponse.map((news: any) => ({
+    id: String(news.id),
+  }));
+}
 
 async function fetchNews(id: string) {
-  const response = await fetch(`http://localhost:3000/api/news?id=${id}`, {
+  const response = await fetch(`${url.api}/api/news?id=${id}`, {
     next: { revalidate: 10 },
   });
 

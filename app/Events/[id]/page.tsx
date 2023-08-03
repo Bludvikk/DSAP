@@ -3,19 +3,20 @@ import Link from "next/link";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import parse from "html-react-parser";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
+import url from "@/utils/getUrl";
 
-// export async function generateStaticParams() {
-//   const response = await fetch(`http://localhost:3000/api/events`);
+export async function generateStaticParams() {
+  const response = await fetch(`${url.api}/api/events`);
 
-//   const eventResponse = await response.json();
+  const eventResponse = await response.json();
 
-//   return eventResponse.map((events: any) => ({
-//     id: String(events.id),
-//   }));
-// }
+  return eventResponse.map((events: any) => ({
+    id: String(events.id),
+  }));
+}
 
 async function fetchEvents(id: string) {
-  const response = await fetch(`http://localhost:3000/api/events?id=${id}`, {
+  const response = await fetch(`${url.api}/api/events?id=${id}`, {
     next: { revalidate: 10 },
   });
 
