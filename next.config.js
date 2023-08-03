@@ -4,6 +4,9 @@ const nextConfig = {
         unoptimized: true,
         domains: ['res.cloudinary.com']
       },
+    experimental: {
+      appDir: true,
+    }
 }
 
 module.exports = nextConfig
