@@ -12,28 +12,32 @@ import {
   UserProfile,
   useSession,
 } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const LogoInfo = () => {
   const loginModal = useLoginModal();
   const user = useSession();
 
   const isUserSignedIn = user.isSignedIn;
+  const router = useRouter();
+
 
   return (
-    <div className="py-1 md:py-2 px-4 md:px-16">
+    <div className="md:py-2 px-4 md:px-16">
       <div className="items-center justify-between flex flex-row">
         <div className="items-center w-full flex flex-row justify-start  ">
-          <div>
+          <div className="rounded-full">
             <Image
               alt="logo"
               width={100}
               height={100}
-              className=" w-[100px] h-[100px] md:block cursor-pointer"
+              className="w-[100px] h-[100px] cursor-pointer"
               src="/images/dsap_logo.png"
+              onClick={() =>  router.push('/')}
             />
           </div>
           <div className="flex flex-col gap-1">
-            <text className="font-semibold text-xl text-[#243e8e]">
+            <text className="font-semibold text-md leading-tight md:text-xl text-[#243e8e]">
               Drugstores Association of the Philippines Inc.
             </text>
             <text className="font-extralight text-[#243e8e]">
@@ -41,17 +45,26 @@ const LogoInfo = () => {
             </text>
           </div>
         </div>
-        <div className="md:w-auto w-auto text-sm md:text-xl font-light border-[1px] rounded-md  h-auto ">
-          <button className="items-center justify-center hover:bg-yellow-300 w-auto h-auto">
-            {" "}
+        <div className="
+        md:w-auto
+        w-auto
+        text-sm
+        md:text-xl
+        font-light
+        border-[1px]
+        rounded-md
+        h-auto 
+        bg-teal-500
+        text-white
+        hover:bg-white
+        hover:text-teal-500
+        duration-300
+        transition-all
+        
+        ">
+          <button className="items-center justify-center w-auto md:py-2 md:w-[200px] h-auto">
             Become a Member
           </button>
-
-          {/* {!isUserSignedIn ? (
-            <SignOutButton>Sign Out</SignOutButton>
-          ) : (
-            <SignInButton>Sign-In</SignInButton>
-          )} */}
         </div>
       </div>
     </div>

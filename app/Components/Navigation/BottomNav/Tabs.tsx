@@ -48,7 +48,7 @@ const Tabs = () => {
       {!hidecomp && (
         <button
           onClick={() => router.push("/contactUs")}
-          className="text-white invisible md:visible  bg-teal-500 hover:scale-110 transition duration-300  text-xs md:text-sm font-light cursor-pointer shadow-lg hover:bg-white hover:border-teal-500 hover:border-[1px] hover:text-teal-500 p-2 rounded-md"
+          className="text-white bg-teal-500 hover:scale-110 transition duration-300  text-xs md:text-sm font-light cursor-pointer shadow-lg hover:bg-white hover:border-teal-500 hover:border-[1px] hover:text-teal-500 p-2 rounded-md"
         >
           Contact Us
         </button>

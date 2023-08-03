@@ -3,6 +3,9 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import { motion } from 'framer-motion'
+import { easeIn } from 'framer-motion'
+import { easeOut } from "framer-motion";
+
 interface CardData {
   id: number;
   date: string;
@@ -12,6 +15,8 @@ interface CardData {
 }
 
 const LatestNews = () => {
+
+
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [cardData, setCardData] = useState<CardData[]>([])
   const handleCardHover = (cardId: number) => {
@@ -40,12 +45,9 @@ const LatestNews = () => {
       </div>
       <div className="">
       <motion.div
-      initial={{ x: 400 }}
-      whileInView={{ x: 100, transition: { type: 'spring', bounce: 0.4,
-      duration: 0.8} }}
-      
-      transition={{ duration: 1}}
-      
+      initial={{ x: "1200px" }}
+      whileInView={{ x: "0" }}
+      transition={{ duration: 0.5, type: "spring"}}
       className="flex flex-row gap-4 md:gap-6 lg:gap-12 xl:gap-16">
         {cardData.map((card) => (
           <Card

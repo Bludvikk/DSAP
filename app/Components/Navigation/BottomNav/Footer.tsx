@@ -18,8 +18,8 @@ import { SignOutButton } from "@clerk/nextjs";
 const Footer = () => {
   return (
     <div className="w-full h-full flex-col  justify-start items-start inline-flex">
-      <div className="self-stretch px-20 py-12 rounded-t-xl bg-gradient-to-b from-teal-200 via-teal-300 to-teal-400 justify-between items-start">
-        <div className="justify-start items-center gap-[420px] flex flex-row">
+      <div className="self-stretch px-20 py-12 rounded-t-xl bg-teal-400/80 justify-between items-start">
+        <div className="justify-start items-center gap-[60px] md:gap-[420px] flex-col flex md:flex-row">
           <div className="flex flex-col gap-3">
             <div className="justify-start items-center gap-3 inline-flex">
               <Image
@@ -33,7 +33,17 @@ const Footer = () => {
                 Drugstores Association of the Philippines Inc.
               </div>
             </div>
-            <div className="md:justify-start justify-center md:items-start gap-3 inline-flex">
+            <div className="flex flex-col md:items-start items-center  md:justify-center pt-6">
+            <div className="text-center text-white text-base font-medium leading-normal">
+                Unit 2009 Medical Plaza Bldg.,
+            </div>
+            <div className="text-center text-white text-base font-medium leading-normal">
+                Mobile no: <span className="font-light"> 09178803727 </span>
+            </div>
+            <div className="text-center text-white text-base font-medium leading-normal">
+                Email: <span className="font-light">dsap_office@yahoo.com</span>
+            </div>
+            <div className="md:justify-start justify-center md:items-start gap-3 pt-6 inline-flex">
               <div className="w-8 h-8 relative">
                 <MdOutlineFacebook
                   size={30}
@@ -59,20 +69,34 @@ const Footer = () => {
                 />
               </div>
             </div>
+            </div>
           </div>
-          <div className="hidden md:block">
-            <div className="w-auto flex-col justify-center items-start gap-2 inline-flex">
-              <div className="text-center underline text-white text-base font-bold leading-normal">
+          <div className="">
+            <div className="w-auto flex-col justify-start items-center md:items-start gap-2 inline-flex">
+              <div className="text-center text-white text-base font-bold leading-normal">
                 Useful links
               </div>
-              <div className="text-center underline text-white text-base font-normal leading-normal">
+              <div className="text-center group transition duration-300 text-white text-base font-normal leading-normal">
+                <Link  href={`/News`}>
                 News
+                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-white"></span>
+                </Link>
               </div>
-              <div className="text-center underline text-white text-base font-normal leading-normal">
+              <div className="text-center group transition duration-300 text-white text-base font-normal leading-normal">
+              <Link href={`/Events`}>
                 Events
+                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-white"></span>
+                </Link>
               </div>
-              <div className="text-center underline text-white text-base font-normal leading-normal">
+              <div className="text-center group transition duration-300 text-white text-base font-normal leading-normal">
+              <Link href={`/Conventions`}>
+                Conventions
+                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-white"></span>
+                </Link>
+              </div>
+              <div className="text-center group transition duration-300 text-white text-base font-normal leading-normal">
                 About
+                <span className="block max-w-0 group-hover:max-w-full transition-all duration-500 h-0.5 bg-white"></span>
               </div>
             </div>
           </div>
@@ -83,7 +107,7 @@ const Footer = () => {
           <div className="text-center text-gray-50 text-sm font-bold leading-tight">
             DSAP © 2023
           </div>
-          <div className="text-center text-gray-50 text-sm font-normal leading-tight">
+          <div className="text-center hidden text-gray-50 text-sm font-normal leading-tight">
             <SignOutButton>Sign Out</SignOutButton>
           </div>
         </div>

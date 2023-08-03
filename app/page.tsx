@@ -20,8 +20,8 @@ export default function Home() {
             alt="ceo"
             className="w-[2520px] contrast-115 h-auto object-cover object-center -scale-x-100"
           />
-          <div className="absolute top-[10%] mx-10 md:mx-auto items-center justify-center  md:left-[10%]">
-            <div className="md:w-[630px] w-[340px] h-auto p-6 bg-black bg-opacity-25 rounded-xl flex-col justify-start items-start gap-11 inline-flex">
+          <div className="absolute top-[10%] translate-x-1/8 mx-10 md:mx-auto items-center justify-center  md:left-[10%]">
+            <div className="md:w-auto md:h-auto w-[340px] h-[auto] p-6 bg-black bg-opacity-25 rounded-xl flex-col justify-start items-start gap-11 inline-flex">
               <div className="md:w-[582px] w-[300px]">
                 <span className="text-white md:text-6xl text-md font-extrabold leading-9 ">
                   Nam

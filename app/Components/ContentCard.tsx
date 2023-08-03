@@ -53,9 +53,9 @@ const ContentCard = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.5 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
+    initial={{ x: "1200px" }}
+    whileInView={{ x: "0" }}
+    transition={{ duration: 0.5, type: "spring"}}
       className="flex-col flex border-[1px] shadow-md h-[auto] rounded-lg"
     >
       <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
