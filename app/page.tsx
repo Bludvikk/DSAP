@@ -50,7 +50,7 @@ export default function Home() {
           </div>
         </div>
         <div className="w-full h-auto  md:p-20 p-6 bg-gray-100 justify-between items-center gap-12 inline-flex">
-          <div className="self-stretch flex-col object-cover object-center lg:w-auto xl:w-auto w-[620px] hidden sm:hidden md:block justify-center items-center gap-7 ">
+          <div className="self-stretch flex-col  object-cover object-center lg:w-auto xl:w-auto w-[620px] hidden sm:hidden md:block justify-center items-center gap-7 ">
             <div className="h-[92px] flex-col  justify-start items-start gap-4 flex">
               <div className="self-stretch text-gray-700 text-2xl font-bold leading-loose">
                 Lorem ipsum dolor sit amet.
@@ -58,7 +58,7 @@ export default function Home() {
               <div className="w-8 h-[0px] border border-teal-500"></div>
             </div>
             <div className="flex-col justify-start items-start gap-7 flex">
-              <div className="w-[621px] text-gray-500 text-base font-normal leading-normal">
+              <div className="w-[621px]  text-gray-500 text-base font-normal leading-normal">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                 dapibus tempus vulputate. Aenean porttitor maximus erat, et
                 tempus massa mollis eu. Nulla placerat est leo, vel pharetra

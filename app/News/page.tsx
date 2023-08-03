@@ -13,6 +13,9 @@ import WriteNewsModal from "../Components/modal/NewsModal";
 import { TfiWrite } from "react-icons/tfi";
 import { AiOutlineEdit } from "react-icons/ai";
 import { useAuth, useUser } from "@clerk/nextjs";
+import { motion } from "framer-motion";
+import SkeletonComponent from "../Components/ContentCardSkeleton";
+import ContentCard from "../Components/ContentCard";
 interface News {
   id: number;
   content: string;
@@ -29,12 +32,11 @@ interface News {
 const NewsPage = () => {
   const WriteModal = useNewsModal();
   const { onOpenForUpdate, newsItemId } = WriteModal;
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [news, setNews] = useState<News[]>([]);
 
   const [roleId, setRoleId] = useState<number | null>(null);
   const [useRole, setUserRole] = useState<string>("");
-
   const { userId } = useAuth();
   const externalId = userId;
 
@@ -69,16 +71,22 @@ const NewsPage = () => {
   }, [externalId]);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const conventionsData = await fetchNews();
-        setNews(conventionsData);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    fetchData();
+    setTimeout(() => {
+      fetch(`api/news`, { next: { revalidate: 10 } })
+        .then((response) => {
+          if (!response.ok) {
+            throw Error("Sorry, some error occurred while fetching news");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setNews(data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+      setIsLoading(false);
+    }, 3000);
   }, []);
 
   return (
@@ -103,71 +111,38 @@ const NewsPage = () => {
         </div>
         <div>
           <div>
-            {news.length > 0 &&
+            {isLoading ? (
+              <SkeletonComponent />
+            ) : (
+              news.length > 0 &&
               news.map((news) => {
                 const formattedDate = moment(news.date).format("MMM - Do");
 
                 const initialSentences =
                   news.content.split(".").slice(0, 1).join(". ") + ".";
                 return (
-                  <div
-                    className="items-center justify-center py-2 px-10 md:px-20"
-                    key={news.id}
-                  >
-                    <div className="flex-col flex border-[1px]  shadow-md h-[auto] rounded-lg">
-                      <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
-                        <div className="relative">
-                          <Image
-                            src={news.attachments}
-                            alt={news.title}
-                            width={100}
-                            height={100}
-                            className="md:h-[320px] w-[440px] h-[180px] self-stretch basis-0 md:w-[840px] object-center object-cover"
-                          />
-                          <div className="w-auto absolute top-[80.5%] md:top-[81.5%] px-1 md:px-6 md:py-4 py-1 bg-teal-500 rounded-tr-xl justify-start items-start inline-flex">
-                            <div>
-                              <span className="text-white text-sm md:text-lg font-bold leading-7">
-                                {formattedDate}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col text-clip w-full">
-                          <div className="flex flex-ol justify-between">
-                            <h1 className="font-semibold hover:underline justify-between  cursor-pointer  text-gray-700 flex flex-row text-md md:font-bold md:text-3xl">
-                              <Link
-                                href={`/News/${news.id}`}
-                                className="hover:text-blue-600"
-                              >
-                                {news.title}
-                              </Link>
-                            </h1>
-                            {roleId === 3 && (
-                              <div
-                                className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
-                                onClick={() =>
-                                  WriteModal.onOpenForUpdate(news.id)
-                                }
-                              >
-                                <AiOutlineEdit size={30} />
-                              </div>
-                            )}
-                          </div>
-                          <h2 className="font-extralight">
-                            Author: {news.author?.attributes.username}
-                          </h2>
-                          <div className="pt-5 md:pt-10 mb-auto">
-                            <div className="opacity-50">
-                              {parse(initialSentences)}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  <div>
+                    <div
+                      className="items-center justify-center py-2 px-10 md:px-20"
+                      key={news.id}
+                    >
+                      <ContentCard
+                        alt={news.title}
+                        attachments={news.attachments}
+                        content={parse(initialSentences)}
+                        id={news.id}
+                        title={news.title}
+                        modal={WriteModal.onOpenForUpdate}
+                        role={roleId}
+                        page="News"
+                        author={news.author?.attributes.username}
+                        date={formattedDate}
+                      />
                     </div>
                   </div>
                 );
-              })}
+              })
+            )}
           </div>
         </div>
       </div>

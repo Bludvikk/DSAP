@@ -15,7 +15,11 @@ import { TfiWrite } from "react-icons/tfi";
 import WriteNewsModal from "../Components/modal/NewsModal";
 import WriteEventModal from "../Components/modal/EventModal";
 import { useAuth } from "@clerk/nextjs";
-
+import { motion } from "framer-motion";
+import ContentCard from "../Components/ContentCard";
+import moment from "moment";
+import { SiMomenteo } from "react-icons/si";
+import SkeletonComponent from "../Components/ContentCardSkeleton";
 interface Event {
   id: number;
   content: string;
@@ -37,6 +41,7 @@ const Event = () => {
   const [events, setEvents] = useState<Event[]>([]);
 
   const { onOpenForUpdate, newsItemId } = WriteModal;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [roleId, setRoleId] = useState<number | null>(null);
   const [useRole, setUserRole] = useState<string>("");
@@ -75,14 +80,16 @@ const Event = () => {
   }, [externalId]);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const eventsData = await fetchEvents();
-        setEvents(eventsData);
-      } catch (error) {}
-    }
-
-    fetchData();
+    setTimeout(() => {
+      async function fetchData() {
+        try {
+          const eventsData = await fetchEvents();
+          setEvents(eventsData);
+        } catch (error) {}
+      }
+      setIsLoading(false);
+      fetchData();
+    }, 3000);
   }, []);
 
   return (
@@ -105,64 +112,40 @@ const Event = () => {
         </div>
         <div>
           <div>
-            {events.length > 0 &&
+            {isLoading ? (
+              <SkeletonComponent />
+            ) : (
+              events.length > 0 &&
               events.map((event) => {
                 const initialSentences =
                   event.content.split(".").slice(0, 1).join(". ") + ".";
+                const formattedStartDate = moment(event.startDate).format(
+                  "MMM Do"
+                );
+                const formattedEndDate = moment(event.endDate).format("Do");
                 return (
                   <div
                     className="items-center justify-center py-2 px-16 "
                     key={event.id}
                   >
-                    <div className="flex-col flex border-[1px] hover:animate-pulse cursor-pointer  transition duration-700 shadow-md h-[360px] rounded-lg">
-                      <div className="items-start justify-start gap-8 p-4 flex-col md:flex-row flex">
-                        <div className="relative">
-                          <Image
-                            src={event.attachments}
-                            alt={event.title}
-                            width={100}
-                            height={100}
-                            className="md:h-[320px] w-[440px] h-[180px] self-stretch basis-0 md:w-[840px] object-center object-cover"
-                          />
-                        </div>
-                        <div className="flex flex-col text-clip w-full">
-                          <div className="flex flex-ol justify-between">
-                            <h1 className="font-semibold hover:underline justify-between  cursor-pointer  text-gray-700 flex flex-row text-md md:font-bold md:text-3xl">
-                              <Link
-                                href={`/Events/${event.id}`}
-                                className="hover:text-blue-600"
-                              >
-                                {event.title}
-                              </Link>
-                            </h1>
-                            {roleId === 3 && (
-                              <div
-                                className="text-teal-500 underline hover:scale-115 cursor-pointer hover:text-gray-800"
-                                onClick={() =>
-                                  WriteModal.onOpenForUpdate(event.id)
-                                }
-                              >
-                                <AiOutlineEdit size={30} />
-                              </div>
-                            )}
-                          </div>
-                          <h2 className="font-extralight">
-                            Author: {event.author?.attributes.username}
-                          </h2>
-                          <div className="pt-5 md:pt-10 mb-auto">
-                            <div className="opacity-50">
-                              {parse(initialSentences)}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <ContentCard
+                      id={event.id}
+                      attachments={event.attachments}
+                      content={parse(initialSentences)}
+                      modal={WriteModal.onOpenForUpdate}
+                      role={roleId}
+                      page={"Events"}
+                      title={event.title}
+                      author={event.author?.attributes.username}
+                      startDate={formattedStartDate}
+                      endDate={formattedEndDate}
+                      location={event.location}
+                      alt={event.title}
+                    />
                   </div>
                 );
-              })}
-            <div></div>
-            <div></div>
-            <div></div>
+              })
+            )}
           </div>
         </div>
       </div>

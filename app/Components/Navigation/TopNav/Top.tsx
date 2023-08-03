@@ -41,8 +41,8 @@ const LogoInfo = () => {
             </text>
           </div>
         </div>
-        <div className="md:w-auto w-[120px] text-sm md:text-xl font-light hover:bg-white hover:text-teal-500 hover:border-teal-500 hover:border-[1px] duration-300 transition-color rounded-lg bg-teal-500 text-white h-auto py-1 px-2">
-          <button className="items-center justify-center">
+        <div className="md:w-auto w-auto text-sm md:text-xl font-light border-[1px] rounded-md  h-auto ">
+          <button className="items-center justify-center hover:bg-yellow-300 w-auto h-auto">
             {" "}
             Become a Member
           </button>

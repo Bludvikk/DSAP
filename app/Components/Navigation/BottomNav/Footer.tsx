@@ -17,7 +17,7 @@ import { SignOutButton } from "@clerk/nextjs";
 
 const Footer = () => {
   return (
-    <div className="w-full h-full flex-col justify-start items-start inline-flex">
+    <div className="w-full h-full flex-col  justify-start items-start inline-flex">
       <div className="self-stretch px-20 py-12 rounded-t-xl bg-gradient-to-b from-teal-200 via-teal-300 to-teal-400 justify-between items-start">
         <div className="justify-start items-center gap-[420px] flex flex-row">
           <div className="flex flex-col gap-3">
@@ -78,7 +78,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="self-stretch px-11 bg-teal-700 py-4 z-10 justify-between items-center flex flex-row relative">
+      <div className="self-stretch px-11 bg-teal-700 py-6 z-10 justify-between items-center flex flex-row relative">
         <div className="flex flex-row gap-6">
           <div className="text-center text-gray-50 text-sm font-bold leading-tight">
             DSAP © 2023
