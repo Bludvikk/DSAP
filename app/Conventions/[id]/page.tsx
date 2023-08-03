@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import parse from "html-react-parser";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
-
+import fetchPonyfill from 'fetch-ponyfill'
 // export async function generateStaticParams() {
 //   const response = await fetch(`http://localhost:3000/api/conventions`);
 
@@ -14,10 +14,9 @@ import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 //   }));
 // }
 
-async function fetchConventions(id: string) {
-  const response = await fetch(`http://127.0.0.1/api/conventions?id=${id}`, {
-    next: { revalidate: 10 },
-  });
+async function fetchConventions(id: string, usePonyfill = true) {
+  const response = await (fetchPonyfill ? fetchPonyfill() : { fetch }).fetch(`https:127.0.0.1/api/conventions?id=${id}`,
+  {next: { revalidate: 10 }})
 
   console.log("fetching events posts with id", id);
 
