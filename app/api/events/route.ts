@@ -1,7 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { NextApiResponse } from "next";
-import { revalidateTag } from "next/cache";
-
 import { NextRequest, NextResponse } from "next/server";
 
 
