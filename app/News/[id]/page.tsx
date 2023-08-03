@@ -20,7 +20,7 @@ import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 // }
 
 async function fetchNews(id: string) {
-  const response = await fetch(`http://127.0.0.1/api/news?id=${id}`, {
+  const response = await fetch(`http://localhost:3000/api/news?id=${id}`, {
     next: { revalidate: 10 },
   });
 

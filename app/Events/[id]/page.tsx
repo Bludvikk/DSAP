@@ -15,7 +15,7 @@ import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 // }
 
 async function fetchEvents(id: string) {
-  const response = await fetch(`http://127.0.0.1/api/events?id=${id}`, {
+  const response = await fetch(`http://localhost:3000/api/events?id=${id}`, {
     next: { revalidate: 10 },
   });
 
