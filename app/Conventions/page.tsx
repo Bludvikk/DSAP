@@ -1,6 +1,6 @@
 "use client";
 
-import { cache, use, useEffect, useState } from "react";
+import { Suspense, cache, use, useEffect, useState } from "react";
 import Button from "../Components/Button";
 import useConventionsModal from "../hooks/useWriteConventionModal";
 import axios from "axios";
@@ -72,18 +72,16 @@ const Conventions = () => {
   }, [externalId]);
 
   useEffect(() => {
-    setTimeout(() => {
-      async function fetchData() {
-        try {
-          const conventionsData = await fetchConventions();
-          setConventions(conventionsData);
-        } catch (error) {
-          console.error(error);
-        }
+    async function fetchData() {
+      try {
+        const conventionsData = await fetchConventions();
+        setConventions(conventionsData);
+      } catch (error) {
+        console.error(error);
       }
-      setIsLoading(false);
-      fetchData();
-    }, 1000);
+    }
+    setIsLoading(false);
+    fetchData();
   }, []);
 
   return (
@@ -109,41 +107,39 @@ const Conventions = () => {
         </div>
         <div>
           <div>
-            {isLoading ? (
-              <SkeletonComponent />
-            ) : (
-              conventions.length > 0 &&
-              conventions.map((convention) => {
-                const initialSentences =
-                  convention.content.split(".").slice(0, 1).join(". ") + ".";
+            <Suspense fallback={<SkeletonComponent />}>
+              {conventions.length > 0 &&
+                conventions.map((convention) => {
+                  const initialSentences =
+                    convention.content.split(".").slice(0, 1).join(". ") + ".";
 
-                const formattedStartDate = moment(convention.startDate).format(
-                  "MMM Do"
-                );
-                const formattedEndDate = moment(convention.endDate).format(
-                  "Do"
-                );
-                return (
-                  <div
-                    className="items-center justify-center py-2 px-10 md:px-20 "
-                    key={convention.id}
-                  >
-                    <ContentCard
-                      id={convention.id}
-                      alt={convention.title}
-                      attachments={convention.attachments}
-                      content={parse(initialSentences)}
-                      modal={WriteModal.onOpenForUpdate}
-                      page="Conventions"
-                      role={roleId}
-                      title={convention.title}
-                      startDate={formattedStartDate}
-                      endDate={formattedEndDate}
-                    />
-                  </div>
-                );
-              })
-            )}
+                  const formattedStartDate = moment(
+                    convention.startDate
+                  ).format("MMM Do");
+                  const formattedEndDate = moment(convention.endDate).format(
+                    "Do"
+                  );
+                  return (
+                    <div
+                      className="items-center justify-center py-2 px-10 md:px-20 "
+                      key={convention.id}
+                    >
+                      <ContentCard
+                        id={convention.id}
+                        alt={convention.title}
+                        attachments={convention.attachments}
+                        content={parse(initialSentences)}
+                        modal={WriteModal.onOpenForUpdate}
+                        page="Conventions"
+                        role={roleId}
+                        title={convention.title}
+                        startDate={formattedStartDate}
+                        endDate={formattedEndDate}
+                      />
+                    </div>
+                  );
+                })}
+            </Suspense>
           </div>
         </div>
       </div>

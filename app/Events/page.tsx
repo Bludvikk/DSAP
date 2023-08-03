@@ -1,6 +1,6 @@
 "use client";
 
-import { cache, use, useEffect, useState } from "react";
+import { Suspense, cache, use, useEffect, useState } from "react";
 import Button from "../Components/Button";
 import useEventModal from "../hooks/useWriteEventModal";
 import axios from "axios";
@@ -112,40 +112,38 @@ const Event = () => {
         </div>
         <div>
           <div>
-            {isLoading ? (
-              <SkeletonComponent />
-            ) : (
-              events.length > 0 &&
-              events.map((event) => {
-                const initialSentences =
-                  event.content.split(".").slice(0, 1).join(". ") + ".";
-                const formattedStartDate = moment(event.startDate).format(
-                  "MMM Do"
-                );
-                const formattedEndDate = moment(event.endDate).format("Do");
-                return (
-                  <div
-                    className="items-center justify-center py-2 px-16 "
-                    key={event.id}
-                  >
-                    <ContentCard
-                      id={event.id}
-                      attachments={event.attachments}
-                      content={parse(initialSentences)}
-                      modal={WriteModal.onOpenForUpdate}
-                      role={roleId}
-                      page={"Events"}
-                      title={event.title}
-                      author={event.author?.attributes.username}
-                      startDate={formattedStartDate}
-                      endDate={formattedEndDate}
-                      location={event.location}
-                      alt={event.title}
-                    />
-                  </div>
-                );
-              })
-            )}
+            <Suspense fallback={<SkeletonComponent />}>
+              {events.length > 0 &&
+                events.map((event) => {
+                  const initialSentences =
+                    event.content.split(".").slice(0, 1).join(". ") + ".";
+                  const formattedStartDate = moment(event.startDate).format(
+                    "MMM Do"
+                  );
+                  const formattedEndDate = moment(event.endDate).format("Do");
+                  return (
+                    <div
+                      className="items-center justify-center py-2 px-16 "
+                      key={event.id}
+                    >
+                      <ContentCard
+                        id={event.id}
+                        attachments={event.attachments}
+                        content={parse(initialSentences)}
+                        modal={WriteModal.onOpenForUpdate}
+                        role={roleId}
+                        page={"Events"}
+                        title={event.title}
+                        author={event.author?.attributes.username}
+                        startDate={formattedStartDate}
+                        endDate={formattedEndDate}
+                        location={event.location}
+                        alt={event.title}
+                      />
+                    </div>
+                  );
+                })}
+            </Suspense>
           </div>
         </div>
       </div>
