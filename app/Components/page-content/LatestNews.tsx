@@ -40,8 +40,10 @@ const LatestNews = () => {
       </div>
       <div className="">
       <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
+      initial={{ x: 400 }}
+      whileInView={{ x: 100, transition: { type: 'spring', bounce: 0.4,
+      duration: 0.8} }}
+      
       transition={{ duration: 1}}
       
       className="flex flex-row gap-4 md:gap-6 lg:gap-12 xl:gap-16">
