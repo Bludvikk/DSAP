@@ -15,12 +15,9 @@ import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 // }
 
 async function fetchConventions(id: string) {
-  const response = await fetch(
-    `http://localhost:3000/api/conventions?id=${id}`,
-    {
-      next: { revalidate: 10 },
-    }
-  );
+  const response = await fetch(`http://127.0.0.1/api/conventions?id=${id}`, {
+    next: { revalidate: 10 },
+  });
 
   console.log("fetching events posts with id", id);
 
@@ -81,9 +78,6 @@ export default async function eventsPost({ params, searchParams }: any) {
                   className="h-10 w-10 rounded-full mr-2 object-cover"
                 />
                 <div>
-                  <p className="font-semibold text-gray-200 text-sm">
-                    {/* {conventions.author?.attributes.username} */}
-                  </p>
                   <p className="font-semibold text-gray-400 text-xs">
                     {formattedStartDate} - {formattedEndDate}
                   </p>
