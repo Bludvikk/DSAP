@@ -84,6 +84,9 @@ const Conventions = () => {
     fetchData();
   }, []);
 
+  const sortedConventions = [...conventions].sort(
+    (a, b) => moment(b.startDate).valueOf() - moment(a.endDate).valueOf()
+  );
   return (
     <Layout>
       <WriteConventionModal conventionItemId={WriteModal.newsItemId} />
@@ -108,37 +111,40 @@ const Conventions = () => {
         <div>
           <div>
             <Suspense fallback={<SkeletonComponent />}>
-              {conventions.length > 0 &&
-                conventions.map((convention) => {
-                  const initialSentences =
-                    convention.content.split(".").slice(0, 1).join(". ") + ".";
+              {sortedConventions.map((convention) => {
+                const initialSentences =
+                  convention.content.split(".").slice(0, 1).join(". ") + ".";
 
-                  const formattedStartDate = moment(
-                    convention.startDate
-                  ).format("MMM Do");
-                  const formattedEndDate = moment(convention.endDate).format(
-                    "Do"
-                  );
-                  return (
-                    <div
-                      className="items-center justify-center py-2 px-10 md:px-20 "
-                      key={convention.id}
-                    >
-                      <ContentCard
-                        id={convention.id}
-                        alt={convention.title}
-                        attachments={convention.attachments}
-                        content={parse(initialSentences)}
-                        modal={WriteModal.onOpenForUpdate}
-                        page="Conventions"
-                        role={roleId}
-                        title={convention.title}
-                        startDate={formattedStartDate}
-                        endDate={formattedEndDate}
-                      />
-                    </div>
-                  );
-                })}
+                const formattedStartDate = moment(convention.startDate).format(
+                  "MMM Do"
+                );
+                const formattedEndDate = moment(convention.endDate).format(
+                  "Do"
+                );
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.3, filter: "blur(20px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="items-center justify-center py-2 px-10 md:px-20 "
+                    key={convention.id}
+                  >
+                    <ContentCard
+                      id={convention.id}
+                      alt={convention.title}
+                      attachments={convention.attachments}
+                      content={parse(initialSentences)}
+                      modal={WriteModal.onOpenForUpdate}
+                      page="Conventions"
+                      role={roleId}
+                      title={convention.title}
+                      startDate={formattedStartDate}
+                      endDate={formattedEndDate}
+                    />
+                  </motion.div>
+                );
+              })}
             </Suspense>
           </div>
         </div>

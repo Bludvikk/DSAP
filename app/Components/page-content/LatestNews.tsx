@@ -5,12 +5,13 @@ import Card from "../Card";
 import { motion } from "framer-motion";
 import { easeIn } from "framer-motion";
 import { easeOut } from "framer-motion";
-
+import moment from "moment";
+import parse from "html-react-parser";
 interface CardData {
   id: number;
   date: string;
   title: string;
-  description: string;
+  content: string;
   attachments: string;
 }
 
@@ -48,17 +49,22 @@ const LatestNews = () => {
           transition={{ duration: 0.5, type: "spring" }}
           className="flex flex-row gap-4 md:gap-6 lg:gap-12 xl:gap-16"
         >
-          {cardData.map((card) => (
-            <Card
-              key={card.id}
-              date={card.date}
-              description={card.description}
-              title={card.title}
-              image={card.attachments}
-              isSelected={card.id === selectedCard}
-              handleCardHover={() => handleCardHover(card.id)}
-            />
-          ))}
+          {cardData.map((card) => {
+            const initialSentences =
+              card.content.split(".").slice(0, 1).join(". ") + ".";
+            const formattedDate = moment(card.date).format("MMM - Do");
+            return (
+              <Card
+                key={card.id}
+                date={formattedDate}
+                description={parse(initialSentences)}
+                title={card.title}
+                image={card.attachments}
+                isSelected={card.id === selectedCard}
+                handleCardHover={() => handleCardHover(card.id)}
+              />
+            );
+          })}
         </motion.div>
       </div>
     </div>

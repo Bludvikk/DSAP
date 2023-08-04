@@ -90,6 +90,9 @@ const Event = () => {
     fetchData();
   }, []);
 
+  const sortedEvent = [...events].sort(
+    (a, b) => moment(b.startDate).valueOf() - moment(a.endDate).valueOf()
+  );
   return (
     <Layout>
       <WriteEventModal eventItemId={WriteModal.newsItemId} />
@@ -111,36 +114,39 @@ const Event = () => {
         <div>
           <div>
             <Suspense fallback={<SkeletonComponent />}>
-              {events.length > 0 &&
-                events.map((event) => {
-                  const initialSentences =
-                    event.content.split(".").slice(0, 1).join(". ") + ".";
-                  const formattedStartDate = moment(event.startDate).format(
-                    "MMM Do"
-                  );
-                  const formattedEndDate = moment(event.endDate).format("Do");
-                  return (
-                    <div
-                      className="items-center justify-center py-2 px-16 "
-                      key={event.id}
-                    >
-                      <ContentCard
-                        id={event.id}
-                        attachments={event.attachments}
-                        content={parse(initialSentences)}
-                        modal={WriteModal.onOpenForUpdate}
-                        role={roleId}
-                        page={"Events"}
-                        title={event.title}
-                        author={event.author?.attributes.username}
-                        startDate={formattedStartDate}
-                        endDate={formattedEndDate}
-                        location={event.location}
-                        alt={event.title}
-                      />
-                    </div>
-                  );
-                })}
+              {sortedEvent.map((event) => {
+                const initialSentences =
+                  event.content.split(".").slice(0, 1).join(". ") + ".";
+                const formattedStartDate = moment(event.startDate).format(
+                  "MMM Do"
+                );
+                const formattedEndDate = moment(event.endDate).format("Do");
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.3, filter: "blur(20px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="items-center justify-center py-2 px-16 "
+                    key={event.id}
+                  >
+                    <ContentCard
+                      id={event.id}
+                      attachments={event.attachments}
+                      content={parse(initialSentences)}
+                      modal={WriteModal.onOpenForUpdate}
+                      role={roleId}
+                      page={"Events"}
+                      title={event.title}
+                      author={event.author?.attributes.username}
+                      startDate={formattedStartDate}
+                      endDate={formattedEndDate}
+                      location={event.location}
+                      alt={event.title}
+                    />
+                  </motion.div>
+                );
+              })}
             </Suspense>
           </div>
         </div>

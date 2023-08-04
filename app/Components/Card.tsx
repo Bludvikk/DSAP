@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface CardProps {
   date: string;
-  description: string;
+  description: React.ReactNode;
   title: string;
   image: string;
   handleCardHover: () => void;
@@ -49,8 +49,12 @@ const Card = ({
         />
         <div className="md:p-6 px-4 py-2 items-start justify-center">
           <h1 className="text-teal-500 text-xs md:text-md"> {date} </h1>
-          <p className="font-semibold text-xs md:text-md text-gray-700 py-2">{title}</p>
-          <p className="font-light text-xs md:text-md py-1 md:py-6 ">{description}</p>
+          <p className="font-semibold text-xs md:text-md text-gray-700 py-2">
+            {title}
+          </p>
+          <p className="font-light text-xs md:text-md py-1 md:py-6 ">
+            {description}
+          </p>
           {/* <div className="bg-teal-500 hover:bg-white hover:text-teal-500 hover:border-[1px] border-teal-500 transition-color duration-300 w-[90px] py-1 px-1 md:py-2 md:px-2 flex flex-col items-center justify-center h-auto rounded-xl">
             <button className="self-stretch text-xs md:text-lg">Learn more</button>
           </div> */}

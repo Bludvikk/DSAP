@@ -16,6 +16,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import SkeletonComponent from "../Components/ContentCardSkeleton";
 import ContentCard from "../Components/ContentCard";
+
 interface News {
   id: number;
   content: string;
@@ -71,22 +72,25 @@ const NewsPage = () => {
   }, [externalId]);
 
   useEffect(() => {
-
-      fetch(`api/news`, { next: { revalidate: 10 } })
-        .then((response) => {
-          if (!response.ok) {
-            throw Error("Sorry, some error occurred while fetching news");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setNews(data);
-        })
-        .catch((err) => {
-          console.log(err.message);
-        });
-      setIsLoading(false);
+    fetch(`api/news`, { next: { revalidate: 10 } })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error("Sorry, some error occurred while fetching news");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setNews(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    setIsLoading(false);
   }, []);
+
+  const sortedNews = [...news].sort(
+    (a, b) => moment(a.date).valueOf() - moment(b.date).valueOf()
+  );
 
   return (
     <Layout>
@@ -98,6 +102,7 @@ const NewsPage = () => {
               News
             </h1>
           </div>
+
           {roleId === 3 && (
             <div
               onClick={WriteModal.onOpenForNew}
@@ -110,42 +115,37 @@ const NewsPage = () => {
         </div>
         <div>
           <div>
-          <Suspense fallback={ <SkeletonComponent /> }>
-
-              {news.length > 0 &&
-              news.map((news) => {
+            <Suspense fallback={<SkeletonComponent />}>
+              {sortedNews.map((news) => {
                 const formattedDate = moment(news.date).format("MMM - Do");
 
                 const initialSentences =
                   news.content.split(".").slice(0, 1).join(". ") + ".";
                 return (
-                  <div>
-                    <div
-                      className="items-center justify-center py-2 px-10 md:px-20"
-                      key={news.id}
-                    >
-                      <ContentCard
-                        alt={news.title}
-                        attachments={news.attachments}
-                        content={parse(initialSentences)}
-                        id={news.id}
-                        title={news.title}
-                        modal={WriteModal.onOpenForUpdate}
-                        role={roleId}
-                        page="News"
-                        author={news.author?.attributes.username}
-                        date={formattedDate}
-                      />
-                    </div>
-                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.3, filter: "blur(20px)" }}
+                    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.3 }}
+                    className="items-center justify-center py-2 px-10 md:px-20"
+                    key={news.id}
+                  >
+                    <ContentCard
+                      alt={news.title}
+                      attachments={news.attachments}
+                      content={parse(initialSentences)}
+                      id={news.id}
+                      title={news.title}
+                      modal={WriteModal.onOpenForUpdate}
+                      role={roleId}
+                      page="News"
+                      author={news.author?.attributes.username}
+                      date={formattedDate}
+                    />
+                  </motion.div>
                 );
-              })
-            }
-
-          </Suspense>
-              
-
-              
+              })}
+            </Suspense>
           </div>
         </div>
       </div>
