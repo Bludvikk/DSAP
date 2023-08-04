@@ -5,18 +5,47 @@ import useWriteNewsModal from "@/app/hooks/useWriteEventModal";
 import url from "@/utils/getUrl";
 import parse from "html-react-parser";
 import moment from "moment";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
+import { getAllNews, getNewsById } from "./getData";
+
+interface Props {
+  params: {
+    id: number;
+  };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const news = await getNewsById(params.id);
+  if (!news) {
+    return {
+      title: "Not Found",
+      description: "The page is not found",
+    };
+  }
+
+  return {
+    title: news.title,
+    description: news.content,
+    alternates: {
+      canonical: `/News/${news.title}`,
+      languages: {
+        "en-US": `en-US/News/${news.title}`,
+      },
+    },
+  };
+}
 
 export async function generateStaticParams() {
-  const response = await fetch(`${url.api}/api/news`);
+  const news = await getAllNews();
 
-  const newsResponse = await response.json();
+  if (!news) return [];
 
-  return newsResponse.map((news: any) => ({
-    id: String(news.id),
+  return news.map((news: any) => ({
+    id: String(news?.id),
   }));
 }
 

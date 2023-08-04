@@ -4,37 +4,50 @@ import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import parse from "html-react-parser";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 import url from "@/utils/getUrl";
+import { Metadata } from "next";
+import { getAllPosts, getPostById } from "./getData";
+
+interface Props {
+  params: {
+    id: number;
+  };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const conventions = await getPostById(params.id);
+  if (!conventions) {
+    return {
+      title: "Not Found",
+      description: "The page is not found",
+    };
+  }
+
+  return {
+    title: conventions.title,
+    description: conventions.content,
+    alternates: {
+      canonical: `/Conventions/${conventions.title}`,
+      languages: {
+        "en-CA": `en-CA/Conventions/${conventions.title}`,
+      },
+    },
+  };
+}
 
 export async function generateStaticParams() {
-  const response = await fetch(`${url.api}/api/conventions`);
+  const conventions = await getAllPosts();
 
-  const conventionsResponse = await response.json();
+  if (!conventions) return [];
 
-  return conventionsResponse.map((conventions: any) => ({
-    id: String(conventions.id),
+  return conventions.map((convention: any) => ({
+    id: String(convention?.id),
   }));
 }
 
-async function fetchConventions(id: string) {
-  const response = await fetch(
-    `${url.api}/api/conventions?id=${id}`,
-    {
-      next: { revalidate: 10 },
-    }
-  );
-
-  console.log("fetching events posts with id", id);
-
-  return response.json();
-}
-
-export default async function eventsPost({ params, searchParams }: any) {
-  const { id } = params;
-
-  const conventions = await fetchConventions(id);
-
-  const formattedStartDate = moment(conventions.startDate).format("MMM Do");
-  const formattedEndDate = moment(conventions.endDate).format("Do");
+export default async function eventsPost({ params }: Props) {
+  const convention = await getPostById(params.id);
+  const formattedStartDate = moment(convention?.startDate).format("MMM Do");
+  const formattedEndDate = moment(convention?.endDate).format("Do");
 
   return (
     <div>
@@ -62,7 +75,7 @@ export default async function eventsPost({ params, searchParams }: any) {
             ></div>
             <img
               alt="yawa"
-              src={conventions.attachments}
+              src={convention?.attachments}
               className="absolute left-0 top-0 w-full h-full z-0 object-cover"
             />
             <div className="p-4 absolute bottom-0 left-0 z-20">
@@ -73,7 +86,7 @@ export default async function eventsPost({ params, searchParams }: any) {
                 News
               </a>
               <h2 className="text-4xl font-semibold text-gray-100 leading-tight">
-                {conventions.title}
+                {convention?.title}
               </h2>
               <div className="flex mt-3">
                 <img
@@ -86,14 +99,16 @@ export default async function eventsPost({ params, searchParams }: any) {
                     {formattedStartDate} - {formattedEndDate}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
-                    {conventions.location}
+                    {convention?.location}
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <div className="px-4 lg:px-0 mt-12 text-gray-700 max-w-screen-md mx-auto text-lg leading-relaxed">
-            <div className="pb-20">{parse(conventions.content)}</div>
+            <div className="pb-20">
+              {convention?.content ? parse(convention.content) : null}
+            </div>
           </div>
         </main>
       </div>

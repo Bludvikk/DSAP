@@ -18,7 +18,8 @@ import { motion } from "framer-motion";
 import SkeletonComponent from "../Components/ContentCardSkeleton";
 import ContentCard from "../Components/ContentCard";
 import moment from "moment";
-interface Conventions {
+
+interface Convention {
   id: number;
   content: string;
   attachments: string;
@@ -28,12 +29,12 @@ interface Conventions {
   location: string;
 }
 
-const Conventions = () => {
+const ConventionsComponent = () => {
   const WriteModal = useConventionsModal();
 
   const { onOpenForUpdate, newsItemId } = WriteModal;
 
-  const [conventions, setConventions] = useState<Conventions[]>([]);
+  const [conventions, setConventions] = useState<Convention[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [roleId, setRoleId] = useState<number | null>(null);
   const [useRole, setUserRole] = useState<string>("");
@@ -153,4 +154,4 @@ const Conventions = () => {
   );
 };
 
-export default Conventions;
+export default ConventionsComponent;

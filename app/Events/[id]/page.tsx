@@ -4,14 +4,43 @@ import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import parse from "html-react-parser";
 import Footer from "@/app/Components/Navigation/BottomNav/Footer";
 import url from "@/utils/getUrl";
+import { Metadata } from "next";
+import { getAllEvents, getEventsById } from "./getData";
+
+interface Props {
+  params: {
+    id: number;
+  };
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const events = await getEventsById(params.id);
+  if (!events) {
+    return {
+      title: "Not Found",
+      description: "The page is not found",
+    };
+  }
+
+  return {
+    title: events.title,
+    description: events.content,
+    alternates: {
+      canonical: `/Events/${events.title}`,
+      languages: {
+        "en-US": `en-US/Events/${events.title}`,
+      },
+    },
+  };
+}
 
 export async function generateStaticParams() {
-  const response = await fetch(`${url.api}/api/events`);
+  const events = await getAllEvents();
 
-  const eventResponse = await response.json();
+  if (!events) return [];
 
-  return eventResponse.map((events: any) => ({
-    id: String(events.id),
+  return events.map((event: any) => ({
+    id: String(event?.id),
   }));
 }
 
@@ -20,18 +49,15 @@ async function fetchEvents(id: string) {
     next: { revalidate: 10 },
   });
 
-  console.log("fetching events posts with id", id);
-
   return response.json();
 }
 
 export default async function eventsPost({ params, searchParams }: any) {
   const { id } = params;
- 
-  const events = await fetchEvents(id);
 
-  const formattedStartDate = moment(events.startDate).format("MMM Do");
-  const formattedEndDate = moment(events.endDate).format("Do");
+  const event = await fetchEvents(id);
+  const formattedStartDate = moment(event?.startDate).format("MMM Do");
+  const formattedEndDate = moment(event?.endDate).format("Do");
 
   return (
     <div>
@@ -59,7 +85,7 @@ export default async function eventsPost({ params, searchParams }: any) {
             ></div>
             <img
               alt="yawa"
-              src={events.attachments}
+              src={event?.attachments}
               className="absolute left-0 top-0 w-full h-full z-0 object-cover"
             />
             <div className="p-4 absolute bottom-0 left-0 z-20">
@@ -70,7 +96,7 @@ export default async function eventsPost({ params, searchParams }: any) {
                 News
               </a>
               <h2 className="text-4xl font-semibold text-gray-100 leading-tight">
-                {events.title}
+                {event?.title}
               </h2>
               <div className="flex mt-3">
                 <img
@@ -80,20 +106,22 @@ export default async function eventsPost({ params, searchParams }: any) {
                 />
                 <div>
                   <p className="font-semibold text-gray-200 text-sm">
-                    {events.author?.attributes.username}
+                    {event.author?.attributes.username}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
                     {formattedStartDate} - {formattedEndDate}
                   </p>
                   <p className="font-semibold text-gray-400 text-xs">
-                    {events.location}
+                    {event?.location}
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <div className="px-4 lg:px-0 mt-12 text-gray-700 max-w-screen-md mx-auto text-lg leading-relaxed">
-            <div className="pb-20">{parse(events.content)}</div>
+            <div className="pb-20">
+              {event?.content ? parse(event.content) : null}
+            </div>
           </div>
         </main>
       </div>
