@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Image from "next/image";
 import LoginModal from "./Components/Navigation/TopNav/Top";
@@ -7,7 +7,7 @@ import Tabs from "./Components/Tabs/tabs";
 import Mission from "./Components/page-content/Mission";
 import NavigationBar from "./Components/Navigation/BottomNav/NavigationBar";
 import Layout from "./Components/Layout";
-import { motion } from 'framer-motion'
+import { motion } from "framer-motion";
 export default function Home() {
   return (
     <Layout>
@@ -53,10 +53,11 @@ export default function Home() {
         </div>
         <div className="w-full h-auto md:p-20 p-6 bg-gray-100 justify-between items-end gap-12 inline-flex">
           <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1  }}
-          transition={{ duration: 1}}
-          className="self-stretch basis-0 flex-col  object-cover object-center md:w-auto lg:w-auto xl:w-auto w-[620px] hidden sm:hidden md:block justify-center items-center gap-7 ">
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="self-stretch basis-0 flex-col  object-cover object-center md:w-auto lg:w-auto xl:w-auto w-[620px] hidden sm:hidden md:block justify-center items-center gap-7 "
+          >
             <div className="h-[92px] flex-col justify-start items-start gap-4 flex">
               <div className="self-stretch text-gray-700 text-2xl font-bold leading-loose">
                 Lorem ipsum dolor sit amet.
@@ -91,11 +92,11 @@ export default function Home() {
             </div>
           </motion.div>
           <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 2}}
-          
-          className="justify-end items-start">
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 2 }}
+            className="justify-end items-start"
+          >
             <Image
               alt="fuc"
               className="w-auto grow shrink md:w-[800px] h-auto rounded-xl object-cover object-center"
@@ -107,7 +108,6 @@ export default function Home() {
         </div>
         <LatestNews />
         <Tabs />
-        <Mission />
       </div>
     </Layout>
   );

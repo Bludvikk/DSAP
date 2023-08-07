@@ -22,7 +22,7 @@ const Events = () => {
             width={100}
             height={100}
           />
-          <div className="w-auto absolute md:top-[85%] top-[90%] md:px-6 md:py-4 py-1 px-2 bg-teal-500 rounded-bl-xl rounded-br-xl justify-start items-start inline-flex">
+          <div className="w-auto md:w-[580px] absolute top-[85%] md:top-[87%] md:px-6 md:py-4 py-1 px-2 bg-teal-500 rounded-bl-xl rounded-br-xl justify-start items-start inline-flex">
             <div>
               <span className="text-white text-xs md:text-lg font-bold leading-tight md:leading-7">
                 DOLOR SIT AMET |{" "}
@@ -57,7 +57,7 @@ const Events = () => {
             width={100}
             height={100}
           />
-          <div className="w-auto absolute md:top-[85%] top-[90%] md:px-6 md:py-4 py-1 px-2 bg-teal-500 rounded-bl-xl rounded-br-xl justify-start items-start inline-flex">
+          <div className="w-auto md:w-[580px] absolute top-[85%] md:top-[87%] md:px-6 md:py-4 py-1 px-2 bg-teal-500 rounded-bl-xl rounded-br-xl justify-start items-start inline-flex">
             <div>
               <span className="text-white text-xs md:text-lg font-bold leading-tight md:leading-7">
                 DOLOR SIT AMET |{" "}
